@@ -1,0 +1,2 @@
+-- Optional seed data for local development.
+-- Example: INSERT INTO public.posts (slug, title, body, published) VALUES (...);

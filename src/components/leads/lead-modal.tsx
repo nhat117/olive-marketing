@@ -1,0 +1,255 @@
+"use client";
+
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useActionState,
+} from "react";
+import {
+  submitLead,
+  type SubmitLeadState,
+} from "@/app/actions/submit-lead";
+import {
+  m3Dialog,
+  m3DisplayHeadline,
+  m3Field,
+  m3FilledButton,
+  m3Label,
+  m3OutlinedButtonSm,
+  m3TextButton,
+} from "@/lib/material-landing";
+
+const LeadModalContext = createContext<{ open: () => void } | null>(null);
+
+export function useLeadModal() {
+  const ctx = useContext(LeadModalContext);
+  if (!ctx) {
+    throw new Error("useLeadModal must be used within LeadFormProvider");
+  }
+  return ctx;
+}
+
+export function LeadFormProvider({ children }: { children: React.ReactNode }) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [formKey, setFormKey] = useState(0);
+
+  const open = useCallback(() => {
+    setFormKey((k) => k + 1);
+    dialogRef.current?.showModal();
+  }, []);
+
+  return (
+    <LeadModalContext.Provider value={{ open }}>
+      {children}
+      <dialog
+        ref={dialogRef}
+        className="lead-dialog fixed top-1/2 left-1/2 z-[100] w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-on-background"
+        aria-labelledby="lead-modal-title"
+      >
+        <LeadFormPanel key={formKey} dialogRef={dialogRef} />
+      </dialog>
+    </LeadModalContext.Provider>
+  );
+}
+
+function LeadFormPanel({
+  dialogRef,
+}: {
+  dialogRef: React.RefObject<HTMLDialogElement | null>;
+}) {
+  const [state, formAction, pending] = useActionState(submitLead, {
+    status: "idle",
+  } satisfies SubmitLeadState);
+
+  useEffect(() => {
+    const el = dialogRef.current;
+    if (!el) return;
+    const onCancel = (e: Event) => {
+      e.preventDefault();
+      el.close();
+    };
+    el.addEventListener("cancel", onCancel);
+    return () => el.removeEventListener("cancel", onCancel);
+  }, [dialogRef]);
+
+  return (
+    <div className={`relative p-6 md:p-8 ${m3Dialog}`}>
+      <button
+        type="button"
+        className={`${m3TextButton} absolute right-2 top-2 text-on-surface-variant`}
+        aria-label="Close"
+        onClick={() => dialogRef.current?.close()}
+      >
+        Close
+      </button>
+
+      {state.status === "success" ? (
+        <div className="pr-8">
+          <h2
+            id="lead-modal-title"
+            className={`${m3DisplayHeadline} text-2xl text-primary`}
+          >
+            Thanks — we got it.
+          </h2>
+          <p className="mt-3 font-body text-sm leading-relaxed text-on-surface-variant">
+            We&apos;ll reply by email shortly with next steps. If your request
+            is urgent, you can still reach us at{" "}
+            <a
+              className="font-medium text-primary underline underline-offset-2"
+              href="mailto:hello@olivemarketing.com"
+            >
+              hello@olivemarketing.com
+            </a>
+            .
+          </p>
+          {state.calUrl && (
+            <a
+              href={state.calUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${m3OutlinedButtonSm} mt-6`}
+            >
+              Pick a time on the calendar
+            </a>
+          )}
+          <button
+            type="button"
+            className={`${m3TextButton} mt-4 px-0 text-on-surface-variant hover:text-primary`}
+            onClick={() => dialogRef.current?.close()}
+          >
+            Done
+          </button>
+        </div>
+      ) : (
+        <>
+          <h2
+            id="lead-modal-title"
+            className={`pr-10 ${m3DisplayHeadline} text-2xl text-primary`}
+          >
+            Let&apos;s talk
+          </h2>
+          <p className="mt-2 font-body text-sm text-on-surface-variant">
+            Share a few details—we&apos;ll get back with scope and availability.
+          </p>
+
+          <form
+            action={formAction}
+            className="relative mt-6 flex flex-col gap-5"
+          >
+            <input type="hidden" name="source" value="lead_modal" />
+
+            <div className="pointer-events-none absolute -left-[9999px] top-0 h-px w-px overflow-hidden opacity-0">
+              <label htmlFor="company_website">Company website</label>
+              <input
+                tabIndex={-1}
+                id="company_website"
+                name="company_website"
+                type="text"
+                autoComplete="off"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="lead-name" className={m3Label}>
+                Name
+              </label>
+              <input
+                id="lead-name"
+                name="name"
+                required
+                maxLength={200}
+                autoComplete="name"
+                className={m3Field}
+              />
+            </div>
+            <div>
+              <label htmlFor="lead-email" className={m3Label}>
+                Email
+              </label>
+              <input
+                id="lead-email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                className={m3Field}
+              />
+            </div>
+            <div>
+              <label htmlFor="lead-phone" className={m3Label}>
+                Phone <span className="font-normal lowercase">(optional)</span>
+              </label>
+              <input
+                id="lead-phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                className={m3Field}
+              />
+            </div>
+            <div>
+              <label htmlFor="lead-business" className={m3Label}>
+                Business / brand{" "}
+                <span className="font-normal lowercase">(optional)</span>
+              </label>
+              <input
+                id="lead-business"
+                name="business_name"
+                maxLength={200}
+                className={m3Field}
+              />
+            </div>
+            <div>
+              <label htmlFor="lead-message" className={m3Label}>
+                What do you need help with?
+              </label>
+              <textarea
+                id="lead-message"
+                name="message"
+                required
+                rows={4}
+                minLength={10}
+                maxLength={5000}
+                placeholder="e.g. New website, Meta ads, content for our salon…"
+                className={`${m3Field} min-h-[120px] resize-y`}
+              />
+            </div>
+
+            {state.status === "error" && (
+              <p className="font-body text-sm text-error" role="alert">
+                {state.message}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={pending}
+              className={`${m3FilledButton} w-full`}
+            >
+              {pending ? "Sending…" : "Send message"}
+            </button>
+          </form>
+        </>
+      )}
+    </div>
+  );
+}
+
+export function OpenLeadButton({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const { open } = useLeadModal();
+  return (
+    <button type="button" className={className} onClick={open}>
+      {children}
+    </button>
+  );
+}

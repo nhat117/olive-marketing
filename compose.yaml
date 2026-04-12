@@ -1,0 +1,14 @@
+# Next.js app only. Local Supabase still runs via Docker when you execute `npm run supabase:start`.
+# Use a root `.env` (not committed) with NEXT_PUBLIC_* for build args, or export them in your shell.
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
