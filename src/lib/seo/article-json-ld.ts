@@ -52,10 +52,41 @@ export function buildOrganizationJsonLd(organizationUrl?: string): Record<string
   const url = organizationUrl ?? getSiteUrl();
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "ProfessionalService",
     name: "Olive Marketing",
     url,
     description:
-      "Digital marketing for salons, spas, nail studios, and beauty brands—websites, social, and paid media focused on bookings.",
+      "Digital marketing agency for salons, spas, nail studios, med-spas, and beauty brands — websites, organic and paid social, local SEO, and campaigns measured on leads and bookings.",
+    areaServed: {
+      "@type": "GeoCircle",
+      geoMidpoint: { "@type": "GeoCoordinates", latitude: -33.87, longitude: 151.21 },
+      geoRadius: "50000",
+    },
+    serviceType: [
+      "Digital Marketing",
+      "Social Media Marketing",
+      "Search Engine Optimization",
+      "Website Design",
+      "Paid Advertising",
+      "Local SEO",
+    ],
+    knowsAbout: [
+      "Salon marketing",
+      "Spa marketing",
+      "Med-spa marketing",
+      "Nail salon marketing",
+      "Beauty brand marketing",
+      "Local SEO for beauty businesses",
+      "Appointment-based business marketing",
+    ],
+    sameAs: [
+      "https://www.facebook.com/profile.php?id=61587077835514",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "contact@olivemarketing.me",
+      contactType: "sales",
+      availableLanguage: ["English", "Vietnamese", "Chinese"],
+    },
   };
 }

@@ -14,6 +14,7 @@ import {
   submitLead,
   type SubmitLeadState,
 } from "@/app/actions/submit-lead";
+import { FbContact, useFbLeadEvent } from "@/components/analytics/FbLeadEvents";
 import type { SiteContact } from "@/lib/site-contact-defaults";
 import { SITE_CONTACT_DEFAULTS } from "@/lib/site-contact-defaults";
 import {
@@ -51,6 +52,10 @@ export function LeadFormProvider({
   const open = useCallback(() => {
     setFormKey((k) => k + 1);
     dialogRef.current?.showModal();
+    // Fire client-side Facebook Contact event when modal opens
+    if (typeof window !== "undefined" && typeof window.fbq === "function") {
+      window.fbq("track", "Contact");
+    }
   }, []);
 
   return (
@@ -79,6 +84,14 @@ function LeadFormPanel({
   const [state, formAction, pending] = useActionState(submitLead, {
     status: "idle",
   } satisfies SubmitLeadState);
+  const fireFbLead = useFbLeadEvent();
+
+  // Fire client-side Lead event (deduplicated with server-side CAPI via eventId)
+  useEffect(() => {
+    if (state.status === "success" && state.fbEventId) {
+      fireFbLead(state.fbEventId);
+    }
+  }, [state, fireFbLead]);
 
   useEffect(() => {
     const el = dialogRef.current;

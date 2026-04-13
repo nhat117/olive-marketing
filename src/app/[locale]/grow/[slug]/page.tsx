@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { FbViewContent } from "@/components/analytics/FbViewContent";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -15,6 +16,7 @@ import {
 import {
   getGrowthPage,
   getGrowthPageSlugs,
+  getGrowthPagesForLocale,
 } from "@/lib/seo/programmatic-growth-pages";
 import {
   buildBreadcrumbJsonLd,
@@ -24,18 +26,18 @@ import {
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-export const dynamicParams = false;
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
-export function generateStaticParams() {
-  return getGrowthPageSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getGrowthPageSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params;
-  const page = getGrowthPage(slug, locale);
+  const page = await getGrowthPage(slug, locale);
   if (!page) return { title: "Guide" };
 
   const url = absoluteUrlLocalized(`/grow/${slug}`, locale);
@@ -65,7 +67,7 @@ export default async function GrowSlugPage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations("Grow");
 
-  const page = getGrowthPage(slug, locale);
+  const page = await getGrowthPage(slug, locale);
   if (!page) notFound();
 
   const path = withLocalePath(`/grow/${slug}`, locale);
@@ -82,15 +84,15 @@ export default async function GrowSlugPage({ params }: Props) {
   const faqLd =
     page.faqs.length > 0 ? buildFaqPageJsonLd(page.faqs) : null;
 
-  const related = getGrowthPageSlugs()
-    .filter((s) => s !== slug)
-    .slice(0, 4);
+  const allPages = await getGrowthPagesForLocale(locale);
+  const related = allPages.filter((p) => p.slug !== slug).slice(0, 4);
 
   return (
     <>
       <JsonLd data={webPageLd} />
       <JsonLd data={breadcrumbLd} />
       {faqLd ? <JsonLd data={faqLd} /> : null}
+      <FbViewContent contentName={page.h1} contentCategory="growth-guide" />
 
       <SiteHeader />
       <main className="min-h-screen bg-surface pt-[4.75rem] md:pt-[5.25rem]">
@@ -175,20 +177,16 @@ export default async function GrowSlugPage({ params }: Props) {
                 {t("relatedSlugTitle")}
               </h2>
               <ul className="flex flex-wrap gap-3">
-                {related.map((s) => {
-                  const p = getGrowthPage(s, locale);
-                  if (!p) return null;
-                  return (
-                    <li key={s}>
-                      <Link
-                        href={`/grow/${s}`}
-                        className="inline-block rounded-full border-2 border-outline-variant/40 px-4 py-2 font-label text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-primary transition-colors hover:border-primary/40 hover:bg-primary/5"
-                      >
-                        {p.h1}
-                      </Link>
-                    </li>
-                  );
-                })}
+                {related.map((p) => (
+                  <li key={p.slug}>
+                    <Link
+                      href={`/grow/${p.slug}`}
+                      className="inline-block rounded-full border-2 border-outline-variant/40 px-4 py-2 font-label text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-primary transition-colors hover:border-primary/40 hover:bg-primary/5"
+                    >
+                      {p.h1}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </section>
           ) : null}

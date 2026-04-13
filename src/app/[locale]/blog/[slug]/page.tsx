@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { MarkdownBody } from "@/components/blog/MarkdownBody";
+import { FbViewContent } from "@/components/analytics/FbViewContent";
+import { PostBody } from "@/components/blog/PostBody";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -125,6 +126,7 @@ export default async function BlogPostPage({ params }: Props) {
       {showStructuredData && (
         <JsonLd data={buildArticleJsonLd(post, blogPath)} />
       )}
+      <FbViewContent contentName={post.title} contentCategory="blog" />
       <SiteHeader />
       <article className="min-h-screen bg-surface pt-[4.75rem] md:pt-[5.25rem]">
         <div className={`${m3ContentMax} ${m3ContentPad}`}>
@@ -163,7 +165,7 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           )}
           <div className="mt-12">
-            <MarkdownBody content={post.body} />
+            <PostBody content={post.body} />
           </div>
         </div>
       </article>

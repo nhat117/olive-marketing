@@ -1,25 +1,25 @@
-import { PostForm } from "@/components/admin/PostForm";
-import { createPost } from "../actions";
+import { GrowthPageForm } from "@/components/admin/GrowthPageForm";
+import { createGrowthPage } from "../actions";
 import { m3DisplayHeadline } from "@/lib/material-landing";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "New post — Olive Admin",
+  title: "New growth page — Olive Admin",
   robots: { index: false, follow: false },
 };
 
-export default function NewPostPage() {
+export default function NewGrowthPage() {
   return (
     <div>
       <h1 className={`${m3DisplayHeadline} text-3xl text-primary`}>
-        New post
+        New growth page
       </h1>
       <p className="mt-2 font-body text-sm text-on-surface-variant">
-        Use the rich text editor below. Check &ldquo;Published&rdquo; to show on
-        /blog (Insights).
+        Create a programmatic SEO landing page. Sections and FAQs generate
+        structured data for Google and AI search.
       </p>
       <div className="mt-8">
-        <PostForm saveAction={createPost} />
+        <GrowthPageForm saveAction={createGrowthPage} />
       </div>
     </div>
   );

@@ -225,3 +225,123 @@ body {
   border-top: 1px solid color-mix(in srgb, var(--color-outline-variant) 60%, transparent);
   margin: 2rem 0;
 }
+
+/* Tiptap Editor Styles */
+.tiptap-editor-content {
+  min-height: 320px;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-on-surface);
+  outline: none;
+}
+
+.tiptap-editor-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--color-outline);
+  pointer-events: none;
+  height: 0;
+  float: left;
+}
+
+.tiptap-editor-content h2 {
+  font-family: var(--font-headline);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tiptap-editor-content h3 {
+  font-family: var(--font-headline);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.tiptap-editor-content h4 {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.tiptap-editor-content p {
+  margin-bottom: 0.75rem;
+}
+
+.tiptap-editor-content ul,
+.tiptap-editor-content ol {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.tiptap-editor-content ul {
+  list-style-type: disc;
+}
+
+.tiptap-editor-content ol {
+  list-style-type: decimal;
+}
+
+.tiptap-editor-content li {
+  margin-bottom: 0.25rem;
+}
+
+.tiptap-editor-content blockquote {
+  border-left: 4px solid var(--color-primary-container);
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: color-mix(in srgb, var(--color-surface-container-low) 85%, transparent);
+  font-style: italic;
+}
+
+.tiptap-editor-content code {
+  font-size: 0.9em;
+  background: var(--color-surface-container);
+  padding: 0.15em 0.4em;
+  border-radius: 0.375rem;
+}
+
+.tiptap-editor-content a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.tiptap-editor-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+}
+
+.tiptap-editor-content hr {
+  border: none;
+  border-top: 1px solid var(--color-outline-variant);
+  margin: 1.5rem 0;
+}
+
+.tiptap-editor-content strong {
+  font-weight: 600;
+}
+
+.tiptap-editor-content em {
+  font-style: italic;
+}
+
+.tiptap-editor-content u {
+  text-decoration: underline;
+}
+
+.tiptap-editor-content s {
+  text-decoration: line-through;
+}

@@ -1,11 +1,15 @@
 "use server";
 
+import { randomUUID } from "crypto";
+import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { sendFbEvent } from "@/lib/fb-capi";
 import { getTranslations } from "next-intl/server";
 
 export type SubmitLeadState =
   | { status: "idle" }
-  | { status: "success"; calUrl?: string }
+  | { status: "success"; calUrl?: string; fbEventId?: string }
   | { status: "error"; message: string };
 
 export async function submitLead(
@@ -56,7 +60,26 @@ export async function submitLead(
     return { status: "error", message: t("db") };
   }
 
-  return { status: "success", calUrl: getCalUrl() };
+  // Fire server-side Facebook CAPI Lead event
+  const fbEventId = randomUUID();
+  const hdrs = await headers();
+  const ck = await cookies();
+  sendFbEvent({
+    eventName: "Lead",
+    eventId: fbEventId,
+    eventSourceUrl: hdrs.get("referer") ?? undefined,
+    userData: {
+      email,
+      phone: phone ?? undefined,
+      clientIpAddress:
+        hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? undefined,
+      clientUserAgent: hdrs.get("user-agent") ?? undefined,
+      fbc: ck.get("_fbc")?.value,
+      fbp: ck.get("_fbp")?.value,
+    },
+  });
+
+  return { status: "success", calUrl: getCalUrl(), fbEventId };
 }
 
 function getCalUrl(): string | undefined {

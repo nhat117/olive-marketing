@@ -66,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   ];
 
-  for (const slug of getGrowthPageSlugs()) {
+  for (const slug of await getGrowthPageSlugs()) {
     entries.push(
       entry(`/grow/${slug}`, {
         lastModified: new Date(),

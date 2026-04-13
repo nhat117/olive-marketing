@@ -63,6 +63,17 @@ export async function SiteFooter() {
         <p className="text-center font-label text-[0.65rem] font-medium uppercase tracking-[0.12em] text-on-surface-variant">
           {t("copyright", { year: new Date().getFullYear() })}
         </p>
+        <p className="text-center font-label text-[0.6rem] text-on-surface-variant/60">
+          Powered by{" "}
+          <a
+            href="https://thinkflow.me"
+            target="_blank"
+            rel="noopener"
+            className="text-on-surface-variant/80 underline decoration-outline-variant/30 underline-offset-2 transition-colors hover:text-primary hover:decoration-primary/40"
+          >
+            Thinkflow
+          </a>
+        </p>
       </div>
     </footer>
   );
