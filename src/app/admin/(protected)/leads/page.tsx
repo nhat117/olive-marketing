@@ -2,25 +2,13 @@ import { createClient } from "@/lib/supabase/server";
 import type { Lead } from "@/lib/types";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { deleteLead } from "./actions";
-import {
-  m3Card,
-  m3CodeChip,
-  m3DisplayHeadline,
-  m3TextButton,
-} from "@/lib/material-landing";
+import { LeadsTable } from "@/components/admin/LeadsTable";
+import { m3DisplayHeadline, m3CodeChip } from "@/lib/material-landing";
 
 export const metadata: Metadata = {
   title: "Leads",
   robots: { index: false, follow: false },
 };
-
-function formatWhen(iso: string) {
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(iso));
-}
 
 export default async function AdminLeadsPage() {
   const supabase = await createClient();
@@ -31,6 +19,19 @@ export default async function AdminLeadsPage() {
 
   const leads = (data ?? []) as Lead[];
 
+  // Pipeline stats
+  const pipeline = {
+    new: leads.filter((l) => l.status === "new").length,
+    contacted: leads.filter((l) => l.status === "contacted").length,
+    qualified: leads.filter((l) => l.status === "qualified").length,
+    converted: leads.filter((l) => l.status === "converted").length,
+    lost: leads.filter((l) => l.status === "lost").length,
+  };
+  const conversionRate =
+    leads.length > 0
+      ? Math.round((pipeline.converted / leads.length) * 100)
+      : 0;
+
   return (
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -39,18 +40,52 @@ export default async function AdminLeadsPage() {
             Leads
           </h1>
           <p className="mt-1 font-body text-sm text-on-surface-variant">
-            Submissions from the site contact form (
-            <code className={m3CodeChip}>lead_modal</code>). Run{" "}
-            <code className={m3CodeChip}>004_leads.sql</code> if this list
-            fails to load.
+            Pipeline CRM — track, qualify, and convert inbound leads.
           </p>
         </div>
         <Link
           href="/admin"
-          className={`${m3TextButton} text-on-surface-variant hover:text-primary`}
+          className="inline-flex items-center gap-1 font-label text-[0.65rem] font-medium text-on-surface-variant hover:text-primary"
         >
-          ← Dashboard
+          <span className="material-symbols-outlined text-[16px]">
+            arrow_back
+          </span>
+          Dashboard
         </Link>
+      </div>
+
+      {/* Pipeline funnel */}
+      <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
+        {[
+          { label: "Total", value: leads.length, icon: "group", color: "bg-surface-container-high text-on-surface" },
+          { label: "New", value: pipeline.new, icon: "fiber_new", color: "bg-primary-container text-on-primary-container" },
+          { label: "Contacted", value: pipeline.contacted, icon: "call", color: "bg-tertiary-container text-on-tertiary-container" },
+          { label: "Qualified", value: pipeline.qualified, icon: "verified", color: "bg-secondary-container text-on-secondary-container" },
+          { label: "Converted", value: pipeline.converted, icon: "check_circle", color: "bg-primary-fixed text-on-primary-fixed-variant" },
+          { label: "Rate", value: `${conversionRate}%`, icon: "trending_up", color: "bg-surface-container-highest text-on-surface" },
+        ].map((s) => (
+          <div
+            key={s.label}
+            className="rounded-2xl border border-outline-variant/15 bg-surface p-4"
+          >
+            <div
+              className={`mb-2 flex size-8 items-center justify-center rounded-lg ${s.color}`}
+            >
+              <span
+                className="material-symbols-outlined text-[16px]"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                {s.icon}
+              </span>
+            </div>
+            <p className="font-label text-[0.55rem] font-semibold uppercase tracking-wider text-on-surface-variant">
+              {s.label}
+            </p>
+            <p className="mt-0.5 font-headline text-xl font-normal text-on-surface">
+              {s.value}
+            </p>
+          </div>
+        ))}
       </div>
 
       {error && (
@@ -58,73 +93,16 @@ export default async function AdminLeadsPage() {
           {error.message}
           {error.message.includes("leads") && (
             <span className="mt-2 block text-sm text-on-surface-variant">
-              Add the <code className={m3CodeChip}>leads</code> table via
-              Supabase migration{" "}
-              <code className={m3CodeChip}>004_leads.sql</code>.
+              Run migration <code className={m3CodeChip}>007_lead_pipeline.sql</code>{" "}
+              to add pipeline columns.
             </span>
           )}
         </p>
       )}
 
-      {!error && leads.length === 0 && (
-        <p className="mt-10 font-body text-on-surface-variant">
-          No leads yet. When visitors use &ldquo;Let&apos;s talk&rdquo; on the
-          site, rows appear here.
-        </p>
-      )}
-
-      <ul className="mt-10 space-y-5">
-        {leads.map((lead) => (
-          <li key={lead.id} className={`${m3Card} p-5 md:p-6`}>
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                <p className="font-headline text-lg font-normal text-primary">
-                  {lead.name}
-                </p>
-                <p className="mt-1 font-mono text-sm text-on-surface-variant">
-                  <a
-                    className="text-primary underline-offset-2 hover:underline"
-                    href={`mailto:${lead.email}`}
-                  >
-                    {lead.email}
-                  </a>
-                  {lead.phone && (
-                    <>
-                      {" · "}
-                      <a
-                        className="text-primary underline-offset-2 hover:underline"
-                        href={`tel:${lead.phone}`}
-                      >
-                        {lead.phone}
-                      </a>
-                    </>
-                  )}
-                </p>
-                {lead.business_name && (
-                  <p className="mt-2 font-body text-sm text-on-surface-variant">
-                    {lead.business_name}
-                  </p>
-                )}
-                <p className="mt-3 whitespace-pre-wrap font-body text-sm leading-relaxed text-on-surface">
-                  {lead.message}
-                </p>
-                <p className="mt-3 font-label text-[0.625rem] font-medium uppercase tracking-wider text-on-surface-variant">
-                  {formatWhen(lead.created_at)} · {lead.source}
-                </p>
-              </div>
-              <form action={deleteLead}>
-                <input type="hidden" name="id" value={lead.id} />
-                <button
-                  type="submit"
-                  className={`${m3TextButton} text-error hover:bg-error-container/40 hover:text-error`}
-                >
-                  Delete
-                </button>
-              </form>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-6">
+        <LeadsTable leads={leads} />
+      </div>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+export type LeadStatus = "new" | "contacted" | "qualified" | "converted" | "lost";
+
 export type Lead = {
   id: string;
   name: string;
@@ -6,6 +8,11 @@ export type Lead = {
   business_name: string | null;
   message: string;
   source: string;
+  status: LeadStatus;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  notes: string | null;
   created_at: string;
 };
 

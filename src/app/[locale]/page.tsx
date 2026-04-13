@@ -16,16 +16,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Home" });
   const url = absoluteUrlLocalized("/", locale);
+
+  const alternates: Record<string, string> = {};
+  for (const loc of ["en", "vi", "zh"]) {
+    alternates[loc] = absoluteUrlLocalized("/", loc);
+  }
+  alternates["x-default"] = absoluteUrlLocalized("/", "en");
+
   return {
+    title: t("ogTitle"),
     description: t("description"),
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: alternates,
+    },
     openGraph: {
       url,
       type: "website",
       description: t("description"),
-      title: t("ogTitle"),
+      title: `${t("ogTitle")} | Olive Marketing`,
+      siteName: "Olive Marketing",
     },
     twitter: {
+      card: "summary_large_image",
+      title: `${t("ogTitle")} | Olive Marketing`,
       description: t("description"),
     },
   };

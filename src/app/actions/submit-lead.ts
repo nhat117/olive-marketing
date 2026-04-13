@@ -29,6 +29,9 @@ export async function submitLead(
     String(formData.get("business_name") ?? "").trim() || null;
   const message = String(formData.get("message") ?? "").trim();
   const source = String(formData.get("source") ?? "lead_modal").trim() || "lead_modal";
+  const utmSource = String(formData.get("utm_source") ?? "").trim() || null;
+  const utmMedium = String(formData.get("utm_medium") ?? "").trim() || null;
+  const utmCampaign = String(formData.get("utm_campaign") ?? "").trim() || null;
 
   if (!name || name.length > 200) {
     return { status: "error", message: t("name") };
@@ -54,6 +57,9 @@ export async function submitLead(
     business_name: businessName,
     message,
     source,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
+    utm_campaign: utmCampaign,
   });
 
   if (error) {

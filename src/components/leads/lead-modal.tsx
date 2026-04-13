@@ -27,6 +27,21 @@ import {
   m3TextButton,
 } from "@/lib/material-landing";
 
+function useUtmParams() {
+  const [utms, setUtms] = useState<Record<string, string>>({});
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const sp = new URLSearchParams(window.location.search);
+    const u: Record<string, string> = {};
+    for (const key of ["utm_source", "utm_medium", "utm_campaign"]) {
+      const v = sp.get(key);
+      if (v) u[key] = v;
+    }
+    setUtms(u);
+  }, []);
+  return utms;
+}
+
 const LeadModalContext = createContext<{ open: () => void } | null>(null);
 
 const SiteContactContext = createContext<SiteContact>(SITE_CONTACT_DEFAULTS);
@@ -81,6 +96,7 @@ function LeadFormPanel({
 }) {
   const t = useTranslations("LeadModal");
   const siteContact = useContext(SiteContactContext);
+  const utms = useUtmParams();
   const [state, formAction, pending] = useActionState(submitLead, {
     status: "idle",
   } satisfies SubmitLeadState);
@@ -168,6 +184,9 @@ function LeadFormPanel({
             className="relative mt-6 flex flex-col gap-5"
           >
             <input type="hidden" name="source" value="lead_modal" />
+            {utms.utm_source && <input type="hidden" name="utm_source" value={utms.utm_source} />}
+            {utms.utm_medium && <input type="hidden" name="utm_medium" value={utms.utm_medium} />}
+            {utms.utm_campaign && <input type="hidden" name="utm_campaign" value={utms.utm_campaign} />}
 
             <div className="pointer-events-none absolute -left-[9999px] top-0 h-px w-px overflow-hidden opacity-0">
               <label htmlFor="company_website">{t("honeypotLabel")}</label>
