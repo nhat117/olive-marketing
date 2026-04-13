@@ -1,5 +1,5 @@
 -- Lead capture from public contact form → admin reads in dashboard
--- Run after 001 (and 002 if you use SEO columns).
+-- Run after 001_init_blog.sql (and 002_post_seo.sql / 003_site_contact.sql if present).
 
 create table if not exists public.leads (
   id uuid primary key default gen_random_uuid(),

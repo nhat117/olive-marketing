@@ -8,6 +8,7 @@ const linkClass =
 
 export async function SiteFooter() {
   const t = await getTranslations("Footer");
+  const tNav = await getTranslations("Nav");
   const contact = await getSiteContact();
   const facebookUrl =
     process.env.NEXT_PUBLIC_FACEBOOK_URL?.trim() || contact.facebookUrl;
@@ -18,8 +19,8 @@ export async function SiteFooter() {
       <div
         className={`mx-auto flex max-w-[1920px] flex-col items-center gap-6 ${m3Section} md:gap-8`}
       >
-        <div className="font-headline text-lg font-normal tracking-[0.2em] text-primary md:text-xl">
-          OLIVE
+        <div className="font-headline text-lg font-normal tracking-[0.12em] text-primary md:text-xl">
+          {tNav("brand")}
         </div>
         <div className="flex flex-col items-center gap-2 text-center font-body text-sm text-on-surface-variant md:text-base">
           <a

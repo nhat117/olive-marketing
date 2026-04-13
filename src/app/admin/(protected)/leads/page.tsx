@@ -41,7 +41,7 @@ export default async function AdminLeadsPage() {
           <p className="mt-1 font-body text-sm text-on-surface-variant">
             Submissions from the site contact form (
             <code className={m3CodeChip}>lead_modal</code>). Run{" "}
-            <code className={m3CodeChip}>003_leads.sql</code> if this list
+            <code className={m3CodeChip}>004_leads.sql</code> if this list
             fails to load.
           </p>
         </div>
@@ -60,7 +60,7 @@ export default async function AdminLeadsPage() {
             <span className="mt-2 block text-sm text-on-surface-variant">
               Add the <code className={m3CodeChip}>leads</code> table via
               Supabase migration{" "}
-              <code className={m3CodeChip}>003_leads.sql</code>.
+              <code className={m3CodeChip}>004_leads.sql</code>.
             </span>
           )}
         </p>

@@ -23,7 +23,7 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Supabase
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. In **SQL Editor**, run migrations in order: [`001_init_blog.sql`](supabase/migrations/001_init_blog.sql), [`002_post_seo.sql`](supabase/migrations/002_post_seo.sql), [`003_leads.sql`](supabase/migrations/003_leads.sql) (contact form → `leads` table).
+2. In **SQL Editor**, run migrations in order: [`001_init_blog.sql`](supabase/migrations/001_init_blog.sql), [`002_post_seo.sql`](supabase/migrations/002_post_seo.sql), [`003_site_contact.sql`](supabase/migrations/003_site_contact.sql), [`004_leads.sql`](supabase/migrations/004_leads.sql) (contact + contact form → `leads`).
 3. **Authentication → Providers**: enable **Email** (password). Create a user under **Users** (or sign up if you add a public signup flow later).
 4. Promote that user to admin (replace the UUID with your user id from **Authentication → Users**):
 
@@ -62,7 +62,8 @@ If the repo root is the parent folder (not `olive-marketing` alone), set **Root 
 2. **SQL Editor** → run migrations **in order** (paste each file, run):
    - [`supabase/migrations/001_init_blog.sql`](supabase/migrations/001_init_blog.sql)
    - [`supabase/migrations/002_post_seo.sql`](supabase/migrations/002_post_seo.sql)
-   - [`supabase/migrations/003_leads.sql`](supabase/migrations/003_leads.sql)
+   - [`supabase/migrations/003_site_contact.sql`](supabase/migrations/003_site_contact.sql)
+   - [`supabase/migrations/004_leads.sql`](supabase/migrations/004_leads.sql)
 3. **Authentication → Providers**: enable **Email** (password). Create a user under **Users** (or sign up via your app later).
 4. Promote that user to admin (SQL Editor — replace UUID):
 
