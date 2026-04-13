@@ -1,15 +1,16 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { m3Section } from "@/lib/material-landing";
+import { getSiteContact } from "@/lib/site-contact";
 
 const linkClass =
   "font-label text-xs font-medium uppercase tracking-[0.12em] text-on-surface-variant transition-colors hover:text-primary";
 
-export function SiteFooter() {
-  const linkedInUrl =
-    process.env.NEXT_PUBLIC_LINKEDIN_URL?.trim() || "#";
+export async function SiteFooter() {
+  const t = await getTranslations("Footer");
+  const contact = await getSiteContact();
   const facebookUrl =
-    process.env.NEXT_PUBLIC_FACEBOOK_URL?.trim() || "#";
-  const linkedInExternal = linkedInUrl !== "#";
+    process.env.NEXT_PUBLIC_FACEBOOK_URL?.trim() || contact.facebookUrl;
   const facebookExternal = facebookUrl !== "#";
 
   return (
@@ -20,28 +21,33 @@ export function SiteFooter() {
         <div className="font-headline text-lg font-normal tracking-[0.2em] text-primary md:text-xl">
           OLIVE
         </div>
+        <div className="flex flex-col items-center gap-2 text-center font-body text-sm text-on-surface-variant md:text-base">
+          <a
+            className={`${linkClass} normal-case tracking-normal`}
+            href={`mailto:${contact.email}`}
+          >
+            {contact.email}
+          </a>
+          <a
+            className={`${linkClass} normal-case tracking-normal`}
+            href={`tel:${contact.phoneE164}`}
+          >
+            {contact.phoneDisplay}
+          </a>
+        </div>
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 md:gap-x-10">
           <Link href="/blog" className={linkClass}>
-            Insights
+            {t("insights")}
           </Link>
           <Link href="/grow" className={linkClass}>
-            Growth guides
+            {t("growthGuides")}
           </Link>
           <a className={linkClass} href="#">
-            Privacy
+            {t("privacy")}
           </a>
           <Link href="/terms" className={linkClass}>
-            Terms
+            {t("terms")}
           </Link>
-          <a
-            className={linkClass}
-            href={linkedInUrl}
-            {...(linkedInExternal
-              ? { target: "_blank", rel: "noopener noreferrer" }
-              : {})}
-          >
-            LinkedIn
-          </a>
           <a
             className={linkClass}
             href={facebookUrl}
@@ -49,13 +55,12 @@ export function SiteFooter() {
               ? { target: "_blank", rel: "noopener noreferrer" }
               : {})}
           >
-            Facebook
+            {t("facebook")}
           </a>
         </div>
         <div className="h-px w-full max-w-[1920px] bg-outline-variant/25" />
         <p className="text-center font-label text-[0.65rem] font-medium uppercase tracking-[0.12em] text-on-surface-variant">
-          © {new Date().getFullYear()} Olive Marketing — digital marketing for
-          beauty &amp; wellness brands.
+          {t("copyright", { year: new Date().getFullYear() })}
         </p>
       </div>
     </footer>

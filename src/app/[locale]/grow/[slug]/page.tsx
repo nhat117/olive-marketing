@@ -1,8 +1,10 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Link } from "@/i18n/navigation";
+import { openGraphLocale } from "@/lib/app-locale";
+import { absoluteUrlLocalized, withLocalePath } from "@/lib/locale-path";
 import {
   m3ContentMax,
   m3ContentPad,
@@ -19,24 +21,24 @@ import {
   buildFaqPageJsonLd,
   buildWebPageJsonLd,
 } from "@/lib/seo/webpage-json-ld";
-import { absoluteUrl } from "@/lib/site-url";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export const dynamicParams = false;
 export const revalidate = 86400;
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ locale: string; slug: string }> };
 
 export function generateStaticParams() {
   return getGrowthPageSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const page = getGrowthPage(slug);
+  const { slug, locale } = await params;
+  const page = getGrowthPage(slug, locale);
   if (!page) return { title: "Guide" };
 
-  const url = absoluteUrl(`/grow/${slug}`);
+  const url = absoluteUrlLocalized(`/grow/${slug}`, locale);
   return {
     title: page.metaTitle,
     description: page.metaDescription,
@@ -47,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${page.metaTitle} | Olive Marketing`,
       description: page.metaDescription,
       siteName: "Olive Marketing",
-      locale: "en_US",
+      locale: openGraphLocale(locale),
     },
     twitter: {
       card: "summary_large_image",
@@ -59,19 +61,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function GrowSlugPage({ params }: Props) {
-  const { slug } = await params;
-  const page = getGrowthPage(slug);
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("Grow");
+
+  const page = getGrowthPage(slug, locale);
   if (!page) notFound();
 
-  const path = `/grow/${slug}`;
+  const path = withLocalePath(`/grow/${slug}`, locale);
   const webPageLd = buildWebPageJsonLd({
     path,
     name: page.h1,
     description: page.metaDescription,
   });
   const breadcrumbLd = buildBreadcrumbJsonLd([
-    { name: "Home", path: "/" },
-    { name: "Growth guides", path: "/grow" },
+    { name: t("breadcrumbHome"), path: withLocalePath("/", locale) },
+    { name: t("breadcrumbGuides"), path: withLocalePath("/grow", locale) },
     { name: page.h1, path },
   ]);
   const faqLd =
@@ -98,7 +103,7 @@ export default async function GrowSlugPage({ params }: Props) {
               href="/"
               className="text-primary transition-opacity hover:opacity-80"
             >
-              Home
+              {t("breadcrumbHome")}
             </Link>
             <span className="mx-2 text-outline-variant" aria-hidden>
               /
@@ -107,7 +112,7 @@ export default async function GrowSlugPage({ params }: Props) {
               href="/grow"
               className="text-primary transition-opacity hover:opacity-80"
             >
-              Growth guides
+              {t("breadcrumbGuides")}
             </Link>
             <span className="mx-2 text-outline-variant" aria-hidden>
               /
@@ -115,7 +120,7 @@ export default async function GrowSlugPage({ params }: Props) {
             <span className="text-on-surface-variant">{page.h1}</span>
           </nav>
 
-          <p className={`${m3Overline} mb-3`}>Olive Marketing</p>
+          <p className={`${m3Overline} mb-3`}>{t("overlineBrand")}</p>
           <h1
             className={`${m3DisplayHeadline} mb-6 text-3xl text-primary md:mb-8 md:text-4xl lg:text-[2.75rem]`}
           >
@@ -147,7 +152,7 @@ export default async function GrowSlugPage({ params }: Props) {
           {page.faqs.length > 0 ? (
             <div className={`mt-12 ${m3ShapeLg} bg-surface-container-low p-6 md:p-8`}>
               <h2 className="mb-6 font-headline text-xl font-normal text-primary md:text-2xl">
-                Common questions
+                {t("faqTitle")}
               </h2>
               <ul className="space-y-6">
                 {page.faqs.map((f) => (
@@ -167,11 +172,11 @@ export default async function GrowSlugPage({ params }: Props) {
           {related.length > 0 ? (
             <section className="mt-14">
               <h2 className="mb-4 font-headline text-lg font-normal text-on-surface md:text-xl">
-                Related guides
+                {t("relatedSlugTitle")}
               </h2>
               <ul className="flex flex-wrap gap-3">
                 {related.map((s) => {
-                  const p = getGrowthPage(s);
+                  const p = getGrowthPage(s, locale);
                   if (!p) return null;
                   return (
                     <li key={s}>
@@ -193,19 +198,19 @@ export default async function GrowSlugPage({ params }: Props) {
               href="/#inquiry"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
-              Request a strategy call
+              {t("ctaStrategyCall")}
             </Link>
             <Link
               href="/grow"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
-              All growth guides
+              {t("ctaAllGuidesList")}
             </Link>
             <Link
               href="/blog"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
-              Insights
+              {t("ctaBlog")}
             </Link>
           </div>
         </article>

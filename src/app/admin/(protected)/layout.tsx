@@ -54,6 +54,12 @@ export default async function AdminProtectedLayout({
               Leads
             </Link>
             <Link
+              href="/admin/contact"
+              className="rounded-full px-3 py-2 font-label text-xs font-medium uppercase tracking-[0.12em] text-on-surface-variant transition-colors hover:bg-secondary-container/60 hover:text-primary md:px-4"
+            >
+              Site contact
+            </Link>
+            <Link
               href="/blog"
               className="rounded-full px-3 py-2 font-label text-xs font-medium uppercase tracking-[0.12em] text-on-surface-variant transition-colors hover:bg-secondary-container/60 hover:text-primary md:px-4"
             >

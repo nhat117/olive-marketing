@@ -93,7 +93,7 @@ If the repo root is the parent folder (not `olive-marketing` alone), set **Root 
    | `NEXT_PUBLIC_SUPABASE_URL` | Project **Settings → API → Project URL** |
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | **anon public** key |
 
-   Optional: `NEXT_PUBLIC_CAL_BOOKING_URL`, `NEXT_PUBLIC_HERO_VIDEO_URL`, `NEXT_PUBLIC_LINKEDIN_URL`, `NEXT_PUBLIC_FACEBOOK_URL`.
+   Optional: `NEXT_PUBLIC_CAL_BOOKING_URL`, `NEXT_PUBLIC_HERO_VIDEO_URL`, `NEXT_PUBLIC_FACEBOOK_URL`.
 
 5. **Deploy**. After the first deployment, confirm **Site URL** and **Redirect URLs** in Supabase match the live URL, then redeploy if you changed env vars.
 

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { LANDING_STOCK_IMAGES } from "@/lib/landing-stock-images";
 import {
   m3Elev2,
@@ -9,28 +10,27 @@ import {
   m3ShapeXl,
 } from "@/lib/material-landing";
 
-export function PhilosophySection() {
+export async function PhilosophySection() {
+  const t = await getTranslations("Philosophy");
+
   return (
     <section id="philosophy" className={`bg-surface ${m3Section}`}>
       <div className="mx-auto max-w-[1920px]">
         <div className="grid grid-cols-12 gap-6 md:gap-8">
           <div className="col-span-12 flex flex-col justify-between gap-6 md:col-span-4 md:gap-4">
             <div>
-              <p className={`${m3OverlineAccent} mb-2`}>Philosophy</p>
+              <p className={`${m3OverlineAccent} mb-2`}>{t("overline")}</p>
               <h2 className="mb-4 font-headline text-2xl font-normal leading-tight tracking-tight text-on-surface md:mb-5 md:text-3xl lg:text-[2.5rem] lg:leading-[1.1]">
-                Your calendar <br />
-                is the scoreboard.
+                {t("titleLine1")} <br />
+                {t("titleLine2")}
               </h2>
               <p className="font-body text-base leading-relaxed text-on-surface-variant md:text-lg lg:text-[1.125rem]">
-                Posting for the sake of posting does not fill columns. We align
-                every channel with how people actually book beauty services:
-                search, social proof, clear service pages, and follow-up that
-                turns one-time visits into regulars.
+                {t("lead")}
               </p>
             </div>
             <div className="mt-2 md:mt-4">
               <div className="mb-3 h-1 w-12 rounded-full bg-tertiary md:w-14" />
-              <span className={m3Overline}>How we work</span>
+              <span className={m3Overline}>{t("howWeWork")}</span>
             </div>
           </div>
           <div className="col-span-12 md:col-span-8">
@@ -42,12 +42,10 @@ export function PhilosophySection() {
                   01
                 </span>
                 <h3 className="mb-2 font-headline text-xl font-normal tracking-tight text-on-surface md:mb-3 md:text-2xl lg:text-3xl">
-                  Content &amp; organic social
+                  {t("card01Title")}
                 </h3>
                 <p className="font-body text-base leading-relaxed text-on-surface-variant md:text-lg">
-                  Reels, carousels, and captions tied to services you sell,
-                  seasonal promos, and local discovery—so the feed supports
-                  bookings, not just reach.
+                  {t("card01Body")}
                 </p>
               </article>
               <article
@@ -55,7 +53,7 @@ export function PhilosophySection() {
               >
                 <Image
                   src={LANDING_STOCK_IMAGES.philosophyAccent}
-                  alt="Skincare treatment—hands applying product in soft light"
+                  alt={t("imageAlt")}
                   fill
                   className="object-cover opacity-15 transition-opacity duration-500 group-hover:opacity-30"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -64,12 +62,10 @@ export function PhilosophySection() {
                   02
                 </span>
                 <h3 className="relative z-10 mb-2 font-headline text-xl font-normal tracking-tight text-on-surface md:mb-3 md:text-2xl lg:text-3xl">
-                  Sites &amp; booking paths
+                  {t("card02Title")}
                 </h3>
                 <p className="relative z-10 font-body text-base leading-relaxed text-on-surface-variant md:text-lg">
-                  Fast, mobile-first sites with clear menus, pricing cues, and
-                  one obvious path to book or message—fewer drop-offs before
-                  someone picks a time.
+                  {t("card02Body")}
                 </p>
               </article>
             </div>

@@ -1,12 +1,24 @@
+import createMiddleware from "next-intl/middleware";
 import { type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { routing } from "@/i18n/routing";
+import {
+  applySupabaseSession,
+  updateSession,
+} from "@/lib/supabase/middleware";
 
-export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+const handleI18n = createMiddleware(routing);
+
+export default async function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+
+  if (path.startsWith("/admin")) {
+    return updateSession(request);
+  }
+
+  const response = handleI18n(request);
+  return applySupabaseSession(request, response);
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };

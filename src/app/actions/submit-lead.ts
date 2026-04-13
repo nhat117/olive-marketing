@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getTranslations } from "next-intl/server";
 
 export type SubmitLeadState =
   | { status: "idle" }
@@ -11,6 +12,7 @@ export async function submitLead(
   _prev: SubmitLeadState,
   formData: FormData,
 ): Promise<SubmitLeadState> {
+  const t = await getTranslations("LeadFormErrors");
   const honeypot = String(formData.get("company_website") ?? "").trim();
   if (honeypot.length > 0) {
     return { status: "success", calUrl: getCalUrl() };
@@ -25,19 +27,19 @@ export async function submitLead(
   const source = String(formData.get("source") ?? "lead_modal").trim() || "lead_modal";
 
   if (!name || name.length > 200) {
-    return { status: "error", message: "Please enter your name." };
+    return { status: "error", message: t("name") };
   }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { status: "error", message: "Please enter a valid email." };
+    return { status: "error", message: t("email") };
   }
   if (!message || message.length < 10) {
     return {
       status: "error",
-      message: "Tell us a bit more (at least 10 characters).",
+      message: t("messageShort"),
     };
   }
   if (message.length > 5000) {
-    return { status: "error", message: "Message is too long." };
+    return { status: "error", message: t("messageLong") };
   }
 
   const supabase = await createClient();
@@ -51,12 +53,7 @@ export async function submitLead(
   });
 
   if (error) {
-    return {
-      status: "error",
-      message:
-        error.message ||
-        "Something went wrong. Email us directly if this keeps happening.",
-    };
+    return { status: "error", message: t("db") };
   }
 
   return { status: "success", calUrl: getCalUrl() };

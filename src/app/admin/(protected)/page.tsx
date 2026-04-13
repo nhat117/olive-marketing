@@ -20,6 +20,9 @@ export default function AdminHomePage() {
         <Link href="/admin/leads" className={m3OutlinedButton}>
           View leads
         </Link>
+        <Link href="/admin/contact" className={m3OutlinedButton}>
+          Site contact
+        </Link>
       </div>
     </div>
   );

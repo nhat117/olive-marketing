@@ -3,23 +3,15 @@
  * Edit this file to add or tune pages—sitemap and static paths follow automatically.
  */
 
-export type GrowthFaq = { question: string; answer: string };
+import type {
+  GrowthFaq,
+  GrowthSection,
+  ProgrammaticGrowthPage,
+} from "./growth-page-types";
+import { PROGRAMMATIC_GROWTH_PAGES_VI } from "./programmatic-growth-pages-vi";
+import { PROGRAMMATIC_GROWTH_PAGES_ZH } from "./programmatic-growth-pages-zh";
 
-export type GrowthSection = {
-  heading: string;
-  paragraphs: string[];
-};
-
-export type ProgrammaticGrowthPage = {
-  slug: string;
-  /** Shown in <title> via root template */
-  metaTitle: string;
-  metaDescription: string;
-  h1: string;
-  intro: string;
-  sections: GrowthSection[];
-  faqs: GrowthFaq[];
-};
+export type { GrowthFaq, GrowthSection, ProgrammaticGrowthPage };
 
 export const PROGRAMMATIC_GROWTH_PAGES: ProgrammaticGrowthPage[] = [
   {
@@ -225,12 +217,33 @@ const bySlug = new Map(
   PROGRAMMATIC_GROWTH_PAGES.map((p) => [p.slug, p]),
 );
 
+const viBySlug = new Map(
+  PROGRAMMATIC_GROWTH_PAGES_VI.map((p) => [p.slug, p]),
+);
+
+const zhBySlug = new Map(
+  PROGRAMMATIC_GROWTH_PAGES_ZH.map((p) => [p.slug, p]),
+);
+
 export function getGrowthPageSlugs(): string[] {
   return PROGRAMMATIC_GROWTH_PAGES.map((p) => p.slug);
 }
 
+export function getGrowthPagesForLocale(locale: string): ProgrammaticGrowthPage[] {
+  if (locale === "vi") return PROGRAMMATIC_GROWTH_PAGES_VI;
+  if (locale === "zh") return PROGRAMMATIC_GROWTH_PAGES_ZH;
+  return PROGRAMMATIC_GROWTH_PAGES;
+}
+
 export function getGrowthPage(
   slug: string,
+  locale = "en",
 ): ProgrammaticGrowthPage | undefined {
+  if (locale === "vi") {
+    return viBySlug.get(slug) ?? bySlug.get(slug);
+  }
+  if (locale === "zh") {
+    return zhBySlug.get(slug) ?? bySlug.get(slug);
+  }
   return bySlug.get(slug);
 }

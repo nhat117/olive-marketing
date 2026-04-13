@@ -1,13 +1,16 @@
-import Link from "next/link";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
+import { Link } from "@/i18n/navigation";
 import {
   m3Card,
   m3DisplayHeadline,
   m3FilledButton,
 } from "@/lib/material-landing";
+import { getTranslations } from "next-intl/server";
 
-export default function BlogPostNotFound() {
+export default async function BlogPostNotFound() {
+  const t = await getTranslations("BlogNotFound");
+
   return (
     <>
       <SiteHeader />
@@ -16,13 +19,11 @@ export default function BlogPostNotFound() {
           <h1
             className={`${m3DisplayHeadline} text-2xl text-primary md:text-3xl`}
           >
-            Article not found
+            {t("title")}
           </h1>
-          <p className="mt-4 font-body text-on-surface-variant">
-            This URL may have changed or the article is not published yet.
-          </p>
+          <p className="mt-4 font-body text-on-surface-variant">{t("body")}</p>
           <Link href="/blog" className={`${m3FilledButton} mt-8 inline-flex`}>
-            Back to insights
+            {t("back")}
           </Link>
         </div>
       </main>

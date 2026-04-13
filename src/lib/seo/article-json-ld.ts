@@ -1,8 +1,12 @@
 import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 import type { Post } from "@/lib/types";
 
-export function buildArticleJsonLd(post: Post): Record<string, unknown> {
-  const url = absoluteUrl(`/blog/${post.slug}`);
+export function buildArticleJsonLd(
+  post: Post,
+  /** Localized pathname, e.g. `/blog/slug` or `/vi/blog/slug` */
+  pathname = `/blog/${post.slug}`,
+): Record<string, unknown> {
+  const url = absoluteUrl(pathname);
   const image =
     post.og_image_url?.trim() ||
     post.cover_image_url?.trim() ||
@@ -44,8 +48,8 @@ export function buildArticleJsonLd(post: Post): Record<string, unknown> {
   return json;
 }
 
-export function buildOrganizationJsonLd(): Record<string, unknown> {
-  const url = getSiteUrl();
+export function buildOrganizationJsonLd(organizationUrl?: string): Record<string, unknown> {
+  const url = organizationUrl ?? getSiteUrl();
   return {
     "@context": "https://schema.org",
     "@type": "Organization",

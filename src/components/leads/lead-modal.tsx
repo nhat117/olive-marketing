@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   createContext,
   useCallback,
@@ -13,6 +14,8 @@ import {
   submitLead,
   type SubmitLeadState,
 } from "@/app/actions/submit-lead";
+import type { SiteContact } from "@/lib/site-contact-defaults";
+import { SITE_CONTACT_DEFAULTS } from "@/lib/site-contact-defaults";
 import {
   m3Dialog,
   m3DisplayHeadline,
@@ -25,6 +28,8 @@ import {
 
 const LeadModalContext = createContext<{ open: () => void } | null>(null);
 
+const SiteContactContext = createContext<SiteContact>(SITE_CONTACT_DEFAULTS);
+
 export function useLeadModal() {
   const ctx = useContext(LeadModalContext);
   if (!ctx) {
@@ -33,7 +38,13 @@ export function useLeadModal() {
   return ctx;
 }
 
-export function LeadFormProvider({ children }: { children: React.ReactNode }) {
+export function LeadFormProvider({
+  children,
+  contact = SITE_CONTACT_DEFAULTS,
+}: {
+  children: React.ReactNode;
+  contact?: SiteContact;
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [formKey, setFormKey] = useState(0);
 
@@ -43,16 +54,18 @@ export function LeadFormProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <LeadModalContext.Provider value={{ open }}>
-      {children}
-      <dialog
-        ref={dialogRef}
-        className="lead-dialog fixed top-1/2 left-1/2 z-[100] w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-on-background"
-        aria-labelledby="lead-modal-title"
-      >
-        <LeadFormPanel key={formKey} dialogRef={dialogRef} />
-      </dialog>
-    </LeadModalContext.Provider>
+    <SiteContactContext.Provider value={contact}>
+      <LeadModalContext.Provider value={{ open }}>
+        {children}
+        <dialog
+          ref={dialogRef}
+          className="lead-dialog fixed top-1/2 left-1/2 z-[100] w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-on-background"
+          aria-labelledby="lead-modal-title"
+        >
+          <LeadFormPanel key={formKey} dialogRef={dialogRef} />
+        </dialog>
+      </LeadModalContext.Provider>
+    </SiteContactContext.Provider>
   );
 }
 
@@ -61,6 +74,8 @@ function LeadFormPanel({
 }: {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
 }) {
+  const t = useTranslations("LeadModal");
+  const siteContact = useContext(SiteContactContext);
   const [state, formAction, pending] = useActionState(submitLead, {
     status: "idle",
   } satisfies SubmitLeadState);
@@ -81,10 +96,10 @@ function LeadFormPanel({
       <button
         type="button"
         className={`${m3TextButton} absolute right-2 top-2 text-on-surface-variant`}
-        aria-label="Close"
+        aria-label={t("close")}
         onClick={() => dialogRef.current?.close()}
       >
-        Close
+        {t("close")}
       </button>
 
       {state.status === "success" ? (
@@ -93,16 +108,15 @@ function LeadFormPanel({
             id="lead-modal-title"
             className={`${m3DisplayHeadline} text-2xl text-primary`}
           >
-            Thanks — we got it.
+            {t("successTitle")}
           </h2>
           <p className="mt-3 font-body text-sm leading-relaxed text-on-surface-variant">
-            We&apos;ll reply by email shortly with next steps. If your request
-            is urgent, you can still reach us at{" "}
+            {t("successLead")}{" "}
             <a
               className="font-medium text-primary underline underline-offset-2"
-              href="mailto:hello@olivemarketing.com"
+              href={`mailto:${siteContact.email}`}
             >
-              hello@olivemarketing.com
+              {siteContact.email}
             </a>
             .
           </p>
@@ -113,7 +127,7 @@ function LeadFormPanel({
               rel="noopener noreferrer"
               className={`${m3OutlinedButtonSm} mt-6`}
             >
-              Pick a time on the calendar
+              {t("calendarCta")}
             </a>
           )}
           <button
@@ -121,7 +135,7 @@ function LeadFormPanel({
             className={`${m3TextButton} mt-4 px-0 text-on-surface-variant hover:text-primary`}
             onClick={() => dialogRef.current?.close()}
           >
-            Done
+            {t("done")}
           </button>
         </div>
       ) : (
@@ -130,10 +144,10 @@ function LeadFormPanel({
             id="lead-modal-title"
             className={`pr-10 ${m3DisplayHeadline} text-2xl text-primary`}
           >
-            Let&apos;s talk
+            {t("title")}
           </h2>
           <p className="mt-2 font-body text-sm text-on-surface-variant">
-            Share a few details—we&apos;ll get back with scope and availability.
+            {t("subtitle")}
           </p>
 
           <form
@@ -143,7 +157,7 @@ function LeadFormPanel({
             <input type="hidden" name="source" value="lead_modal" />
 
             <div className="pointer-events-none absolute -left-[9999px] top-0 h-px w-px overflow-hidden opacity-0">
-              <label htmlFor="company_website">Company website</label>
+              <label htmlFor="company_website">{t("honeypotLabel")}</label>
               <input
                 tabIndex={-1}
                 id="company_website"
@@ -155,7 +169,7 @@ function LeadFormPanel({
 
             <div>
               <label htmlFor="lead-name" className={m3Label}>
-                Name
+                {t("name")}
               </label>
               <input
                 id="lead-name"
@@ -168,7 +182,7 @@ function LeadFormPanel({
             </div>
             <div>
               <label htmlFor="lead-email" className={m3Label}>
-                Email
+                {t("email")}
               </label>
               <input
                 id="lead-email"
@@ -181,7 +195,10 @@ function LeadFormPanel({
             </div>
             <div>
               <label htmlFor="lead-phone" className={m3Label}>
-                Phone <span className="font-normal lowercase">(optional)</span>
+                {t("phone")}{" "}
+                <span className="font-normal lowercase">
+                  {t("phoneOptional")}
+                </span>
               </label>
               <input
                 id="lead-phone"
@@ -193,8 +210,10 @@ function LeadFormPanel({
             </div>
             <div>
               <label htmlFor="lead-business" className={m3Label}>
-                Business / brand{" "}
-                <span className="font-normal lowercase">(optional)</span>
+                {t("business")}{" "}
+                <span className="font-normal lowercase">
+                  {t("businessOptional")}
+                </span>
               </label>
               <input
                 id="lead-business"
@@ -205,7 +224,7 @@ function LeadFormPanel({
             </div>
             <div>
               <label htmlFor="lead-message" className={m3Label}>
-                What do you need help with?
+                {t("message")}
               </label>
               <textarea
                 id="lead-message"
@@ -214,7 +233,7 @@ function LeadFormPanel({
                 rows={4}
                 minLength={10}
                 maxLength={5000}
-                placeholder="e.g. New website, Meta ads, content for our salon…"
+                placeholder={t("messagePlaceholder")}
                 className={`${m3Field} min-h-[120px] resize-y`}
               />
             </div>
@@ -230,7 +249,7 @@ function LeadFormPanel({
               disabled={pending}
               className={`${m3FilledButton} w-full`}
             >
-              {pending ? "Sending…" : "Send message"}
+              {pending ? t("submitting") : t("submit")}
             </button>
           </form>
         </>

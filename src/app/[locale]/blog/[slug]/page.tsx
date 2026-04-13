@@ -1,10 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownBody } from "@/components/blog/MarkdownBody";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Link } from "@/i18n/navigation";
+import { intlLocaleTag, openGraphLocale } from "@/lib/app-locale";
+import { absoluteUrlLocalized, withLocalePath } from "@/lib/locale-path";
 import { createClient } from "@/lib/supabase/server";
 import { buildArticleJsonLd } from "@/lib/seo/article-json-ld";
 import {
@@ -15,17 +17,17 @@ import {
   m3ShapeLg,
   m3TextButton,
 } from "@/lib/material-landing";
-import { absoluteUrl } from "@/lib/site-url";
 import type { Post } from "@/lib/types";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export const revalidate = 60;
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ locale: string; slug: string }> };
 
-function formatDate(iso: string | null) {
+function formatDate(iso: string | null, locale: string) {
   if (!iso) return "";
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(intlLocaleTag(locale), {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -33,7 +35,7 @@ function formatDate(iso: string | null) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const supabase = await createClient();
   const { data } = await supabase
     .from("posts")
@@ -65,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     row.meta_description?.trim() || row.excerpt?.trim() || undefined;
   const image =
     row.og_image_url?.trim() || row.cover_image_url?.trim() || undefined;
-  const url = absoluteUrl(`/blog/${row.slug}`);
+  const url = absoluteUrlLocalized(`/blog/${row.slug}`, locale);
   const robots = (row.no_index ?? false)
     ? {
         index: false as const,
@@ -88,7 +90,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       modifiedTime: row.updated_at,
       images: image ? [{ url: image, alt: row.title }] : [],
       siteName: "Olive Marketing",
-      locale: "en_US",
+      locale: openGraphLocale(locale),
     },
     twitter: {
       card: "summary_large_image",
@@ -100,7 +102,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("Blog");
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("posts")
@@ -113,21 +118,24 @@ export default async function BlogPostPage({ params }: Props) {
 
   const post = data as Post;
   const showStructuredData = !(post.no_index ?? false);
+  const blogPath = withLocalePath(`/blog/${post.slug}`, locale);
 
   return (
     <>
-      {showStructuredData && <JsonLd data={buildArticleJsonLd(post)} />}
+      {showStructuredData && (
+        <JsonLd data={buildArticleJsonLd(post, blogPath)} />
+      )}
       <SiteHeader />
       <article className="min-h-screen bg-surface pt-[4.75rem] md:pt-[5.25rem]">
         <div className={`${m3ContentMax} ${m3ContentPad}`}>
           <Link href="/blog" className={m3TextButton}>
-            ← Insights
+            {t("backToListing")}
           </Link>
           <time
             className={`${m3Overline} mt-8 block text-[0.65rem]`}
             dateTime={post.published_at ?? post.created_at}
           >
-            {formatDate(post.published_at ?? post.created_at)}
+            {formatDate(post.published_at ?? post.created_at, locale)}
           </time>
           <h1
             className={`${m3DisplayHeadline} mt-4 text-[2rem] leading-tight text-primary md:text-4xl lg:text-5xl`}

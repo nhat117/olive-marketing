@@ -81,6 +81,21 @@ export const m3Dialog =
 export const m3Card =
   `${m3ShapeLg} border border-outline-variant/20 bg-surface-container-lowest ${m3Elev2}`;
 
+/** M3 “liquid glass”: very light fill + heavy blur + saturation (readability: solid text colors). */
+export const m3GlassElevated =
+  `${m3ShapeXl} border border-white/25 bg-surface-container-lowest/[0.26] backdrop-blur-[56px] backdrop-saturate-150 ring-1 ring-inset ring-white/35 shadow-[inset_0_1px_1px_rgba(255,255,255,0.62),inset_0_-1px_0_rgba(54,69,25,0.06),0_12px_48px_-16px_rgba(27,28,25,0.11)]`;
+
+export const m3GlassPrimary =
+  `${m3ShapeXl} border border-white/30 bg-primary-container/[0.34] backdrop-blur-[56px] backdrop-saturate-150 text-on-primary-container ring-1 ring-inset ring-white/22 shadow-[inset_0_1px_1px_rgba(255,255,255,0.32),0_14px_48px_-14px_rgba(27,28,25,0.18)]`;
+
+/** Solid primary tonal surface — max contrast for body copy vs translucent glass cards. */
+export const m3TonalPrimaryCard =
+  `${m3ShapeXl} border border-on-primary-container/25 bg-primary-container text-on-primary-container shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_12px_40px_-12px_rgba(27,28,25,0.32)] ring-1 ring-inset ring-white/18`;
+
+/** Large-corner glass (hero quote, callouts) — one surface, no nested frames */
+export const m3GlassExpressive =
+  `${m3ShapeExpressive} border border-white/28 bg-surface-container-lowest/[0.28] backdrop-blur-[56px] backdrop-saturate-150 ring-1 ring-inset ring-white/32 shadow-[inset_0_1px_1px_rgba(255,255,255,0.58),inset_0_-1px_0_rgba(54,69,25,0.05),0_16px_56px_-18px_rgba(27,28,25,0.13)]`;
+
 export const m3ListSurface =
   `${m3ShapeLg} border-2 border-outline-variant/20 bg-surface-container-lowest ${m3Elev1} overflow-hidden`;
 

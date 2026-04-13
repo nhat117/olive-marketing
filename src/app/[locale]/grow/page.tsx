@@ -1,61 +1,65 @@
-import Link from "next/link";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
+import { Link } from "@/i18n/navigation";
+import { absoluteUrlLocalized } from "@/lib/locale-path";
 import {
   m3ContentMax,
   m3ContentPad,
   m3DisplayHeadline,
-  m3Overline,
   m3ShapeLg,
 } from "@/lib/material-landing";
-import {
-  PROGRAMMATIC_GROWTH_PAGES,
-} from "@/lib/seo/programmatic-growth-pages";
-import { absoluteUrl } from "@/lib/site-url";
+import { getGrowthPagesForLocale } from "@/lib/seo/programmatic-growth-pages";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-const desc =
-  "Programmatic growth guides for salons, spas, nail studios, med-spas, and beauty brands—each page targets how clients search and book.";
+type Props = { params: Promise<{ locale: string }> };
 
-export const metadata: Metadata = {
-  title: "Growth guides",
-  description: desc,
-  alternates: { canonical: absoluteUrl("/grow") },
-  openGraph: {
-    type: "website",
-    url: absoluteUrl("/grow"),
-    title: "Growth guides | Olive Marketing",
-    description: desc,
-  },
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Grow" });
+  const url = absoluteUrlLocalized("/grow", locale);
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      url,
+      title: `${t("metaTitle")} | Olive Marketing`,
+      description: t("metaDescription"),
+    },
+  };
+}
 
-export default function GrowIndexPage() {
+export default async function GrowIndexPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("Grow");
+  const pages = getGrowthPagesForLocale(locale);
+
   return (
     <>
       <SiteHeader />
       <main className="min-h-screen bg-surface pt-[4.75rem] md:pt-[5.25rem]">
         <div className={`${m3ContentMax} ${m3ContentPad}`}>
-          <p className={`${m3Overline} mb-3`}>Programmatic SEO</p>
           <h1
             className={`${m3DisplayHeadline} mb-4 text-3xl text-primary md:text-4xl`}
           >
-            Growth guides by niche
+            {t("title")}
           </h1>
           <p className="mb-10 max-w-2xl font-body text-lg leading-relaxed text-on-surface-variant md:mb-12">
-            Landing pages tuned for how beauty and wellness businesses get
-            found—each with unique copy, FAQs, and structured data. Start
-            with your segment or{" "}
+            {t("introBefore")}{" "}
             <Link
               href="/#inquiry"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
-              talk to us
+              {t("introLink")}
             </Link>{" "}
-            about a custom program.
+            {t("introAfter")}
           </p>
 
           <ul className="grid gap-4 sm:grid-cols-2 lg:gap-5">
-            {PROGRAMMATIC_GROWTH_PAGES.map((p) => (
+            {pages.map((p) => (
               <li key={p.slug}>
                 <Link
                   href={`/grow/${p.slug}`}
@@ -77,14 +81,14 @@ export default function GrowIndexPage() {
               href="/blog"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
-              Insights (blog)
+              {t("footerBlog")}
             </Link>
             {" · "}
             <Link
               href="/"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
-              Home
+              {t("footerHome")}
             </Link>
           </p>
         </div>
