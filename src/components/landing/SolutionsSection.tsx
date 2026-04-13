@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import { AnimateOnScroll } from "@/components/animations/AnimateOnScroll";
 import { Link } from "@/i18n/navigation";
 import { LANDING_STOCK_IMAGES } from "@/lib/landing-stock-images";
 import {
@@ -39,6 +40,7 @@ export async function SolutionsSection() {
       />
 
       <div className="relative mx-auto max-w-[1920px]">
+        <AnimateOnScroll animation="fade-up">
         <header className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between md:gap-6">
           <div className="min-w-0 space-y-2">
             <p className={m3OverlineAccent}>{t("overline")}</p>
@@ -50,10 +52,12 @@ export async function SolutionsSection() {
             {t("seeHow")}
           </Link>
         </header>
+        </AnimateOnScroll>
 
         <div className="flex flex-col gap-4 md:gap-5 lg:grid lg:grid-cols-12 lg:gap-5">
+          <AnimateOnScroll animation="fade-up" delay={100} className="lg:col-span-7 lg:row-span-2">
           <article
-            className={`relative flex min-h-0 flex-col overflow-hidden p-6 ${m3GlassElevated} md:p-8 lg:col-span-7 lg:row-span-2 lg:min-h-[min(24rem,62vh)] lg:p-10 ${m3TransitionExpressive}`}
+            className={`relative flex min-h-0 flex-col overflow-hidden p-6 ${m3GlassElevated} md:p-8 lg:min-h-[min(24rem,62vh)] lg:p-10 ${m3TransitionExpressive}`}
           >
             <span
               className="pointer-events-none absolute -left-1 top-2 font-headline text-[clamp(5rem,14vw,9rem)] leading-none italic text-primary/10 select-none md:top-4"
@@ -84,9 +88,11 @@ export async function SolutionsSection() {
               />
             </div>
           </article>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll animation="fade-up" delay={200} className="lg:col-span-5">
           <article
-            className={`relative flex min-h-[300px] flex-col justify-between overflow-hidden p-6 md:min-h-[340px] md:p-8 lg:col-span-5 lg:min-h-[360px] ${m3GlassElevated} ${m3TransitionExpressive}`}
+            className={`relative flex min-h-[300px] flex-col justify-between overflow-hidden p-6 md:min-h-[340px] md:p-8 lg:min-h-[360px] ${m3GlassElevated} ${m3TransitionExpressive}`}
           >
             <span
               className="pointer-events-none absolute -right-1 top-0 font-headline text-[clamp(4.5rem,12vw,7.5rem)] leading-none italic text-primary/10 select-none"
@@ -106,9 +112,11 @@ export async function SolutionsSection() {
               </p>
             </div>
           </article>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll animation="fade-up" delay={300} className="lg:col-span-5">
           <article
-            className={`relative flex min-h-[300px] flex-col justify-between overflow-hidden p-6 md:min-h-[340px] md:p-8 lg:col-span-5 lg:min-h-[360px] ${m3TonalPrimaryCard} ${m3TransitionExpressive}`}
+            className={`relative flex min-h-[300px] flex-col justify-between overflow-hidden p-6 md:min-h-[340px] md:p-8 lg:min-h-[360px] ${m3TonalPrimaryCard} ${m3TransitionExpressive}`}
           >
             <span
               className="pointer-events-none absolute -left-1 bottom-0 font-headline text-[clamp(4.5rem,12vw,7.5rem)] leading-none italic text-on-primary-container/20 select-none"
@@ -128,9 +136,11 @@ export async function SolutionsSection() {
               </p>
             </div>
           </article>
+          </AnimateOnScroll>
 
+          <AnimateOnScroll animation="scale-up" delay={150} className="lg:col-span-12">
           <div
-            className={`group relative min-h-[200px] overflow-hidden ${m3ShapeXl} md:min-h-[220px] lg:col-span-12 lg:min-h-[240px] ${m3Elev2} ${m3TransitionExpressive}`}
+            className={`group relative min-h-[200px] overflow-hidden ${m3ShapeXl} md:min-h-[220px] lg:min-h-[240px] ${m3Elev2} ${m3TransitionExpressive}`}
           >
             <Image
               src={LANDING_STOCK_IMAGES.servicesBanner}
@@ -154,6 +164,7 @@ export async function SolutionsSection() {
               </div>
             </div>
           </div>
+          </AnimateOnScroll>
         </div>
       </div>
     </section>

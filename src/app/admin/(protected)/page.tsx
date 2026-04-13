@@ -1,11 +1,5 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import {
-  m3Card,
-  m3DisplayHeadline,
-  m3FilledButtonSm,
-  m3Overline,
-} from "@/lib/material-landing";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -46,24 +40,13 @@ async function getStats() {
   };
 }
 
-function StatCard({
-  label,
-  value,
-  href,
-}: {
-  label: string;
-  value: number;
-  href: string;
-}) {
-  return (
-    <Link href={href} className={`${m3Card} group block p-6 transition-shadow hover:shadow-lg`}>
-      <p className={m3Overline}>{label}</p>
-      <p className="mt-2 font-headline text-3xl font-normal text-primary">
-        {value}
-      </p>
-    </Link>
-  );
-}
+const statMeta = [
+  { key: "totalPosts", label: "Total posts", icon: "article", color: "bg-primary-container text-on-primary-container", href: "/admin/posts" },
+  { key: "published", label: "Published", icon: "check_circle", color: "bg-primary-fixed text-on-primary-fixed-variant", href: "/admin/posts" },
+  { key: "drafts", label: "Drafts", icon: "edit_note", color: "bg-surface-container-high text-on-surface-variant", href: "/admin/posts" },
+  { key: "totalLeads", label: "Total leads", icon: "contact_mail", color: "bg-tertiary-container text-on-tertiary-container", href: "/admin/leads" },
+  { key: "recentLeads", label: "Leads (7d)", icon: "trending_up", color: "bg-secondary-container text-on-secondary-container", href: "/admin/leads" },
+] as const;
 
 export default async function AdminHomePage() {
   const stats = await getStats();
@@ -73,53 +56,62 @@ export default async function AdminHomePage() {
       {/* Header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className={`${m3DisplayHeadline} text-3xl text-primary`}>
+          <p className="font-label text-[0.6rem] font-semibold uppercase tracking-[0.28em] text-tertiary">
+            Overview
+          </p>
+          <h1 className="mt-1 font-headline text-3xl font-normal tracking-tight text-on-surface">
             Dashboard
           </h1>
           <p className="mt-1 font-body text-sm text-on-surface-variant">
             Publish insights and review inbound leads.
           </p>
         </div>
-        <Link href="/admin/posts/new" className={m3FilledButtonSm}>
+        <Link
+          href="/admin/posts/new"
+          className="inline-flex min-h-10 items-center gap-2 rounded-full bg-primary px-5 font-label text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-on-primary shadow-[0_2px_8px_-2px_rgba(54,69,25,0.25)] transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] hover:shadow-md active:scale-[0.98]"
+        >
+          <span className="material-symbols-outlined text-[16px]">add</span>
           New post
         </Link>
       </div>
 
       {/* Stats grid */}
-      <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-        <StatCard
-          label="Total posts"
-          value={stats.totalPosts}
-          href="/admin/posts"
-        />
-        <StatCard
-          label="Published"
-          value={stats.published}
-          href="/admin/posts"
-        />
-        <StatCard label="Drafts" value={stats.drafts} href="/admin/posts" />
-        <StatCard
-          label="Total leads"
-          value={stats.totalLeads}
-          href="/admin/leads"
-        />
-        <StatCard
-          label="Leads (7d)"
-          value={stats.recentLeads}
-          href="/admin/leads"
-        />
+      <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 md:gap-4">
+        {statMeta.map((s) => (
+          <Link
+            key={s.key}
+            href={s.href}
+            className="group rounded-3xl border border-outline-variant/15 bg-surface p-5 transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] hover:border-primary/20 hover:shadow-[0_4px_16px_-4px_rgba(54,69,25,0.12)]"
+          >
+            <div className={`mb-3 flex size-10 items-center justify-center rounded-xl ${s.color} transition-transform duration-200 group-hover:scale-105`}>
+              <span className="material-symbols-outlined text-[18px]">
+                {s.icon}
+              </span>
+            </div>
+            <p className="font-label text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
+              {s.label}
+            </p>
+            <p className="mt-1 font-headline text-2xl font-normal text-on-surface md:text-3xl">
+              {stats[s.key]}
+            </p>
+          </Link>
+        ))}
       </div>
 
       {/* Quick actions */}
       <div className="mt-10">
-        <h2 className={`${m3Overline} mb-4`}>Quick actions</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <p className="mb-4 font-label text-[0.6rem] font-semibold uppercase tracking-[0.28em] text-on-surface-variant">
+          Quick actions
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Link
             href="/admin/posts/new"
-            className={`${m3Card} flex items-center gap-4 p-5 transition-shadow hover:shadow-lg`}
+            className="group flex items-center gap-4 rounded-2xl border border-outline-variant/15 bg-surface p-5 transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] hover:border-primary/20 hover:bg-primary/[0.03] hover:shadow-[0_2px_12px_-4px_rgba(54,69,25,0.1)]"
           >
-            <span className="material-symbols-outlined text-primary">
-              edit_note
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container transition-transform duration-200 group-hover:scale-105">
+              <span className="material-symbols-outlined text-[20px]">
+                edit_note
+              </span>
             </span>
             <div>
               <p className="font-body text-sm font-medium text-on-surface">
@@ -132,10 +124,12 @@ export default async function AdminHomePage() {
           </Link>
           <Link
             href="/admin/leads"
-            className={`${m3Card} flex items-center gap-4 p-5 transition-shadow hover:shadow-lg`}
+            className="group flex items-center gap-4 rounded-2xl border border-outline-variant/15 bg-surface p-5 transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] hover:border-primary/20 hover:bg-primary/[0.03] hover:shadow-[0_2px_12px_-4px_rgba(54,69,25,0.1)]"
           >
-            <span className="material-symbols-outlined text-primary">
-              inbox
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-tertiary-container text-on-tertiary-container transition-transform duration-200 group-hover:scale-105">
+              <span className="material-symbols-outlined text-[20px]">
+                inbox
+              </span>
             </span>
             <div>
               <p className="font-body text-sm font-medium text-on-surface">
@@ -148,10 +142,12 @@ export default async function AdminHomePage() {
           </Link>
           <Link
             href="/admin/contact"
-            className={`${m3Card} flex items-center gap-4 p-5 transition-shadow hover:shadow-lg`}
+            className="group flex items-center gap-4 rounded-2xl border border-outline-variant/15 bg-surface p-5 transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] hover:border-primary/20 hover:bg-primary/[0.03] hover:shadow-[0_2px_12px_-4px_rgba(54,69,25,0.1)]"
           >
-            <span className="material-symbols-outlined text-primary">
-              tune
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-secondary-container text-on-secondary-container transition-transform duration-200 group-hover:scale-105">
+              <span className="material-symbols-outlined text-[20px]">
+                tune
+              </span>
             </span>
             <div>
               <p className="font-body text-sm font-medium text-on-surface">

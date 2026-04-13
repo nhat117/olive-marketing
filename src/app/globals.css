@@ -345,3 +345,71 @@ body {
 .tiptap-editor-content s {
   text-decoration: line-through;
 }
+
+/* ─── Scroll-triggered animations (AnimateOnScroll) ─── */
+.aos {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.aos-fade-up {
+  transform: translateY(36px);
+}
+
+.aos-fade-in {
+  transform: none;
+}
+
+.aos-slide-left {
+  transform: translateX(-44px);
+}
+
+.aos-slide-right {
+  transform: translateX(44px);
+}
+
+.aos-scale-up {
+  transform: scale(0.92);
+}
+
+.aos.aos-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Hero entrance animations (CSS-only, trigger on load) ─── */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-anim {
+  opacity: 0;
+  animation: hero-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-anim-d1 { animation-delay: 0.1s; }
+.hero-anim-d2 { animation-delay: 0.25s; }
+.hero-anim-d3 { animation-delay: 0.4s; }
+.hero-anim-d4 { animation-delay: 0.6s; }
+.hero-anim-d5 { animation-delay: 0.85s; }
+
+/* ─── Respect reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .aos,
+  .hero-anim {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+}

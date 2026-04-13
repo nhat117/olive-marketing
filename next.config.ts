@@ -19,6 +19,7 @@ const securityHeaders = [
       "img-src 'self' data: blob: https://images.unsplash.com https://lh3.googleusercontent.com https://*.supabase.co https://www.facebook.com",
       "font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com",
       "connect-src 'self' https://*.supabase.co https://va.vercel-scripts.com https://vitals.vercel-insights.com https://www.facebook.com https://connect.facebook.net",
+      "media-src 'self' https: blob:",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",

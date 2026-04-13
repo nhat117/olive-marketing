@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { AnimateOnScroll } from "@/components/animations/AnimateOnScroll";
 import { OpenLeadButton } from "@/components/leads/lead-modal";
 import {
   m3Elev3,
@@ -28,6 +29,7 @@ export async function InquirySection() {
         <ul className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
           {INQUIRY_TESTIMONIALS.map((item, i) => (
             <li key={item.name}>
+              <AnimateOnScroll animation="fade-up" delay={i * 150}>
               <figure
                 className={`flex h-full flex-col p-6 text-left md:p-8 ${m3ExpressiveTonalSurfaces[i % 3]}`}
               >
@@ -45,11 +47,13 @@ export async function InquirySection() {
                   </p>
                 </figcaption>
               </figure>
+              </AnimateOnScroll>
             </li>
           ))}
         </ul>
       </div>
 
+      <AnimateOnScroll animation="scale-up" delay={100}>
       <div
         className={`mx-auto max-w-3xl border-2 border-primary/20 bg-gradient-to-br from-surface-container-high via-surface-container-high to-primary-fixed/30 p-8 text-center ${m3ShapeExpressive} ${m3Elev3} md:p-10 lg:p-12`}
       >
@@ -90,6 +94,7 @@ export async function InquirySection() {
           </div>
         </div>
       </div>
+      </AnimateOnScroll>
     </section>
   );
 }
