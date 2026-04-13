@@ -34,6 +34,7 @@ export default async function EditGrowthPagePage({ params }: Props) {
     locale: string;
     meta_title: string;
     meta_description: string;
+    og_image_url?: string | null;
     h1: string;
     intro: string;
     sections: { heading: string; paragraphs: string[] }[];

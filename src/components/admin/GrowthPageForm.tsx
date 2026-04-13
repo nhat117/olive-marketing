@@ -2,6 +2,9 @@
 
 import { useActionState, useState, useCallback } from "react";
 import type { GrowthActionState } from "@/app/admin/(protected)/growth/actions";
+import { SerpPreview } from "./SerpPreview";
+import { SocialCardPreview } from "./SocialCardPreview";
+import { SeoScore } from "./SeoScore";
 import {
   m3Checkbox,
   m3DangerOutlinedSm,
@@ -21,6 +24,7 @@ type GrowthPage = {
   locale: string;
   meta_title: string;
   meta_description: string;
+  og_image_url?: string | null;
   h1: string;
   intro: string;
   sections: Section[];
@@ -51,6 +55,14 @@ function CharCount({ value, ideal, max }: { value: string; ideal: string; max: n
   );
 }
 
+function estimateWordCount(sections: Section[], intro: string): number {
+  let text = intro;
+  for (const s of sections) {
+    text += " " + s.heading + " " + s.paragraphs.join(" ");
+  }
+  return text.trim() ? text.trim().split(/\s+/).length : 0;
+}
+
 export function GrowthPageForm({ saveAction, page }: Props) {
   const [state, formAction, pending] = useActionState(saveAction, undefined);
   const [sections, setSections] = useState<Section[]>(
@@ -61,6 +73,10 @@ export function GrowthPageForm({ saveAction, page }: Props) {
   );
   const [metaTitle, setMetaTitle] = useState(page?.meta_title ?? "");
   const [metaDesc, setMetaDesc] = useState(page?.meta_description ?? "");
+  const [ogImage, setOgImage] = useState(page?.og_image_url ?? "");
+  const [h1, setH1] = useState(page?.h1 ?? "");
+  const [slug, setSlug] = useState(page?.slug ?? "");
+  const [intro, setIntro] = useState(page?.intro ?? "");
 
   const addSection = () =>
     setSections([...sections, { heading: "", paragraphs: [""] }]);
@@ -72,32 +88,26 @@ export function GrowthPageForm({ saveAction, page }: Props) {
     setFaqs(faqs.filter((_, idx) => idx !== i));
 
   const generateSeo = useCallback(() => {
-    const h1El = document.getElementById("h1") as HTMLInputElement | null;
-    const introEl = document.getElementById("intro") as HTMLTextAreaElement | null;
-    const h1 = h1El?.value?.trim() ?? "";
-    const intro = introEl?.value?.trim() ?? "";
-
     if (!metaTitle && h1) {
-      setMetaTitle(`${h1.length > 50 ? h1.slice(0, 50) + "..." : h1} | Olive Marketing`);
+      const t = h1.length > 50 ? h1.slice(0, 50) + "..." : h1;
+      setMetaTitle(`${t} | Olive Marketing`);
     }
     if (!metaDesc && intro) {
       setMetaDesc(intro.slice(0, 155));
     }
-  }, [metaTitle, metaDesc]);
+  }, [h1, intro, metaTitle, metaDesc]);
+
+  const siteUrl = typeof window !== "undefined"
+    ? (process.env.NEXT_PUBLIC_SITE_URL || window.location.origin)
+    : "";
+  const previewUrl = `${siteUrl}/grow/${slug || "your-slug"}`;
 
   return (
     <form action={formAction} className="flex max-w-3xl flex-col gap-6">
       {/* Locale */}
       <div>
-        <label htmlFor="locale" className={m3Label}>
-          Locale
-        </label>
-        <select
-          id="locale"
-          name="locale"
-          defaultValue={page?.locale ?? "en"}
-          className={m3FieldFilled}
-        >
+        <label htmlFor="locale" className={m3Label}>Locale</label>
+        <select id="locale" name="locale" defaultValue={page?.locale ?? "en"} className={m3FieldFilled}>
           <option value="en">English</option>
           <option value="vi">Vietnamese</option>
           <option value="zh">Chinese</option>
@@ -106,14 +116,13 @@ export function GrowthPageForm({ saveAction, page }: Props) {
 
       {/* H1 */}
       <div>
-        <label htmlFor="h1" className={m3Label}>
-          H1 heading
-        </label>
+        <label htmlFor="h1" className={m3Label}>H1 heading</label>
         <input
           id="h1"
           name="h1"
           required
-          defaultValue={page?.h1 ?? ""}
+          value={h1}
+          onChange={(e) => setH1(e.target.value)}
           className={m3FieldFilled}
           placeholder="Main page heading"
         />
@@ -121,60 +130,49 @@ export function GrowthPageForm({ saveAction, page }: Props) {
 
       {/* Slug */}
       <div>
-        <label htmlFor="slug" className={m3Label}>
-          Slug (URL)
-        </label>
+        <label htmlFor="slug" className={m3Label}>Slug (URL)</label>
         <input
           id="slug"
           name="slug"
           placeholder="auto-generated from H1 if empty"
-          defaultValue={page?.slug ?? ""}
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
           className={m3FieldFilled}
         />
         <p className="mt-1 font-body text-xs text-on-surface-variant">
-          The URL path: /grow/<span className="font-medium">your-slug</span>
+          The URL path: /grow/<span className="font-medium">{slug || "your-slug"}</span>
         </p>
       </div>
 
       {/* Intro */}
       <div>
-        <label htmlFor="intro" className={m3Label}>
-          Intro paragraph
-        </label>
+        <label htmlFor="intro" className={m3Label}>Intro paragraph</label>
         <textarea
           id="intro"
           name="intro"
           rows={3}
           required
-          defaultValue={page?.intro ?? ""}
+          value={intro}
+          onChange={(e) => setIntro(e.target.value)}
           className={m3FieldFilled}
           placeholder="Opening paragraph below the H1"
         />
       </div>
 
       {/* Sections */}
-      <fieldset
-        className={`${m3ShapeLg} border-2 border-outline-variant/30 bg-surface-container-lowest/50 p-6 md:p-8`}
-      >
+      <fieldset className={`${m3ShapeLg} border-2 border-outline-variant/30 bg-surface-container-lowest/50 p-6 md:p-8`}>
         <legend className="px-1 font-label text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary">
           Content sections
         </legend>
         <div className="flex flex-col gap-6">
           {sections.map((section, i) => (
-            <div
-              key={i}
-              className="relative rounded-xl border border-outline-variant/20 bg-surface-container-low/30 p-4"
-            >
+            <div key={i} className="relative rounded-xl border border-outline-variant/20 bg-surface-container-low/30 p-4">
               <div className="mb-3 flex items-center justify-between">
                 <span className="font-label text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                   Section {i + 1}
                 </span>
                 {sections.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeSection(i)}
-                    className="font-label text-xs text-error hover:underline"
-                  >
+                  <button type="button" onClick={() => removeSection(i)} className="font-label text-xs text-error hover:underline">
                     Remove
                   </button>
                 )}
@@ -182,61 +180,35 @@ export function GrowthPageForm({ saveAction, page }: Props) {
               <div className="flex flex-col gap-3">
                 <div>
                   <label className={m3Label}>Heading</label>
-                  <input
-                    name={`section_heading_${i}`}
-                    defaultValue={section.heading}
-                    className={m3FieldFilled}
-                    placeholder="Section heading"
-                  />
+                  <input name={`section_heading_${i}`} defaultValue={section.heading} className={m3FieldFilled} placeholder="Section heading" />
                 </div>
                 <div>
-                  <label className={m3Label}>
-                    Body (separate paragraphs with blank lines)
-                  </label>
-                  <textarea
-                    name={`section_body_${i}`}
-                    rows={4}
-                    defaultValue={section.paragraphs.join("\n\n")}
-                    className={m3FieldFilled}
-                    placeholder="Section content..."
-                  />
+                  <label className={m3Label}>Body (separate paragraphs with blank lines)</label>
+                  <textarea name={`section_body_${i}`} rows={4} defaultValue={section.paragraphs.join("\n\n")} className={m3FieldFilled} placeholder="Section content..." />
                 </div>
               </div>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={addSection}
-            className={m3OutlinedButtonSm}
-          >
+          <button type="button" onClick={addSection} className={m3OutlinedButtonSm}>
             + Add section
           </button>
         </div>
       </fieldset>
 
       {/* FAQs */}
-      <fieldset
-        className={`${m3ShapeLg} border-2 border-outline-variant/30 bg-surface-container-lowest/50 p-6 md:p-8`}
-      >
+      <fieldset className={`${m3ShapeLg} border-2 border-outline-variant/30 bg-surface-container-lowest/50 p-6 md:p-8`}>
         <legend className="px-1 font-label text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary">
           FAQs (appears in FAQ schema for Google)
         </legend>
         <div className="flex flex-col gap-6">
           {faqs.map((faq, i) => (
-            <div
-              key={i}
-              className="relative rounded-xl border border-outline-variant/20 bg-surface-container-low/30 p-4"
-            >
+            <div key={i} className="relative rounded-xl border border-outline-variant/20 bg-surface-container-low/30 p-4">
               <div className="mb-3 flex items-center justify-between">
                 <span className="font-label text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                   FAQ {i + 1}
                 </span>
                 {faqs.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeFaq(i)}
-                    className="font-label text-xs text-error hover:underline"
-                  >
+                  <button type="button" onClick={() => removeFaq(i)} className="font-label text-xs text-error hover:underline">
                     Remove
                   </button>
                 )}
@@ -244,61 +216,38 @@ export function GrowthPageForm({ saveAction, page }: Props) {
               <div className="flex flex-col gap-3">
                 <div>
                   <label className={m3Label}>Question</label>
-                  <input
-                    name={`faq_question_${i}`}
-                    defaultValue={faq.question}
-                    className={m3FieldFilled}
-                    placeholder="What question do clients ask?"
-                  />
+                  <input name={`faq_question_${i}`} defaultValue={faq.question} className={m3FieldFilled} placeholder="What question do clients ask?" />
                 </div>
                 <div>
                   <label className={m3Label}>Answer</label>
-                  <textarea
-                    name={`faq_answer_${i}`}
-                    rows={3}
-                    defaultValue={faq.answer}
-                    className={m3FieldFilled}
-                    placeholder="Answer..."
-                  />
+                  <textarea name={`faq_answer_${i}`} rows={3} defaultValue={faq.answer} className={m3FieldFilled} placeholder="Answer..." />
                 </div>
               </div>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={addFaq}
-            className={m3OutlinedButtonSm}
-          >
+          <button type="button" onClick={addFaq} className={m3OutlinedButtonSm}>
             + Add FAQ
           </button>
         </div>
       </fieldset>
 
-      {/* SEO */}
-      <fieldset
-        className={`${m3ShapeLg} border-2 border-outline-variant/30 bg-surface-container-lowest/50 p-6 md:p-8`}
-      >
+      {/* ─── SEO Section ─── */}
+      <fieldset className={`${m3ShapeLg} border-2 border-outline-variant/30 bg-surface-container-lowest/50 p-6 md:p-8`}>
         <legend className="px-1 font-label text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary">
-          SEO metadata
+          Search &amp; social (SEO)
         </legend>
         <div className="mb-4 flex items-center justify-between">
           <p className="font-body text-xs text-on-surface-variant">
-            These appear in Google search results and AI answers.
+            These appear in Google search results, AI answers, and social shares.
           </p>
-          <button
-            type="button"
-            onClick={generateSeo}
-            className={`${m3OutlinedButtonSm} ml-4 shrink-0`}
-          >
+          <button type="button" onClick={generateSeo} className={`${m3OutlinedButtonSm} ml-4 shrink-0`}>
             AI suggest
           </button>
         </div>
         <div className="flex flex-col gap-5">
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="meta_title" className={m3Label}>
-                Meta title
-              </label>
+              <label htmlFor="meta_title" className={m3Label}>Meta title</label>
               <CharCount value={metaTitle} ideal="50-60" max={60} />
             </div>
             <input
@@ -314,9 +263,7 @@ export function GrowthPageForm({ saveAction, page }: Props) {
           </div>
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="meta_description" className={m3Label}>
-                Meta description
-              </label>
+              <label htmlFor="meta_description" className={m3Label}>Meta description</label>
               <CharCount value={metaDesc} ideal="150-160" max={160} />
             </div>
             <textarea
@@ -331,38 +278,61 @@ export function GrowthPageForm({ saveAction, page }: Props) {
               placeholder="Summary for search results and AI citations"
             />
           </div>
+          <div>
+            <label htmlFor="og_image_url" className={m3Label}>
+              Social share image URL (Open Graph)
+            </label>
+            <input
+              id="og_image_url"
+              name="og_image_url"
+              type="url"
+              placeholder="1200x630px recommended for Facebook/Twitter"
+              value={ogImage}
+              onChange={(e) => setOgImage(e.target.value)}
+              className={m3FieldFilled}
+            />
+          </div>
         </div>
       </fieldset>
 
+      {/* ─── SEO Previews ─── */}
+      <div className="flex flex-col gap-4">
+        <SeoScore
+          title={metaTitle}
+          description={metaDesc}
+          hasImage={!!ogImage}
+          bodyLength={estimateWordCount(sections, intro)}
+          slug={slug}
+        />
+        <SerpPreview
+          title={metaTitle || `${h1} | Olive Marketing`}
+          description={metaDesc || intro}
+          url={previewUrl}
+          fallbackTitle={h1 || "Page Title"}
+        />
+        <SocialCardPreview
+          title={metaTitle || `${h1} | Olive Marketing`}
+          description={metaDesc || intro}
+          imageUrl={ogImage}
+          fallbackTitle={h1 || "Page Title"}
+        />
+      </div>
+
       {/* Published */}
       <label className="flex items-center gap-3 font-body text-sm text-on-surface">
-        <input
-          type="checkbox"
-          name="published"
-          defaultChecked={page?.published ?? true}
-          className={m3Checkbox}
-        />
+        <input type="checkbox" name="published" defaultChecked={page?.published ?? true} className={m3Checkbox} />
         Published
       </label>
 
       {state?.error && (
-        <p className="font-body text-sm text-error" role="alert">
-          {state.error}
-        </p>
+        <p className="font-body text-sm text-error" role="alert">{state.error}</p>
       )}
 
       <div className="flex items-center gap-4">
-        <button
-          type="submit"
-          disabled={pending}
-          className={`${m3FilledButton} w-fit`}
-        >
+        <button type="submit" disabled={pending} className={`${m3FilledButton} w-fit`}>
           {pending ? "Saving..." : "Save"}
         </button>
-        <a
-          href="/admin/growth"
-          className="font-label text-xs font-medium uppercase tracking-[0.12em] text-on-surface-variant hover:text-primary"
-        >
+        <a href="/admin/growth" className="font-label text-xs font-medium uppercase tracking-[0.12em] text-on-surface-variant hover:text-primary">
           Cancel
         </a>
       </div>

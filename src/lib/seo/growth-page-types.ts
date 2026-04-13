@@ -9,6 +9,7 @@ export type ProgrammaticGrowthPage = {
   slug: string;
   metaTitle: string;
   metaDescription: string;
+  ogImageUrl?: string | null;
   h1: string;
   intro: string;
   sections: GrowthSection[];

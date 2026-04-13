@@ -41,6 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!page) return { title: "Guide" };
 
   const url = absoluteUrlLocalized(`/grow/${slug}`, locale);
+  const image = page.ogImageUrl?.trim() || undefined;
   return {
     title: page.metaTitle,
     description: page.metaDescription,
@@ -50,6 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url,
       title: `${page.metaTitle} | Olive Marketing`,
       description: page.metaDescription,
+      images: image ? [{ url: image, alt: page.h1 }] : [],
       siteName: "Olive Marketing",
       locale: openGraphLocale(locale),
     },
@@ -57,6 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: `${page.metaTitle} | Olive Marketing`,
       description: page.metaDescription,
+      images: image ? [image] : undefined,
     },
     robots: { index: true, follow: true },
   };

@@ -50,6 +50,7 @@ type DbRow = {
   locale: string;
   meta_title: string;
   meta_description: string;
+  og_image_url?: string | null;
   h1: string;
   intro: string;
   sections: GrowthSection[];
@@ -61,6 +62,7 @@ function rowToPage(row: DbRow): ProgrammaticGrowthPage {
     slug: row.slug,
     metaTitle: row.meta_title,
     metaDescription: row.meta_description,
+    ogImageUrl: row.og_image_url ?? null,
     h1: row.h1,
     intro: row.intro,
     sections: row.sections,
@@ -76,7 +78,7 @@ export const getGrowthPagesForLocale = cache(
       const supabase = await createClient();
       const { data, error } = await supabase
         .from("growth_pages")
-        .select("slug, locale, meta_title, meta_description, h1, intro, sections, faqs")
+        .select("slug, locale, meta_title, meta_description, og_image_url, h1, intro, sections, faqs")
         .eq("locale", locale)
         .eq("published", true)
         .order("slug", { ascending: true });
@@ -104,7 +106,7 @@ export const getGrowthPage = cache(
       const supabase = await createClient();
       const { data, error } = await supabase
         .from("growth_pages")
-        .select("slug, locale, meta_title, meta_description, h1, intro, sections, faqs")
+        .select("slug, locale, meta_title, meta_description, og_image_url, h1, intro, sections, faqs")
         .eq("slug", slug)
         .eq("locale", locale)
         .eq("published", true)
@@ -118,7 +120,7 @@ export const getGrowthPage = cache(
       if (locale !== "en") {
         const { data: enData } = await supabase
           .from("growth_pages")
-          .select("slug, locale, meta_title, meta_description, h1, intro, sections, faqs")
+          .select("slug, locale, meta_title, meta_description, og_image_url, h1, intro, sections, faqs")
           .eq("slug", slug)
           .eq("locale", "en")
           .eq("published", true)

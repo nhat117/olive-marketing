@@ -75,6 +75,7 @@ export async function createGrowthPage(
 
   const meta_title = (formData.get("meta_title") as string)?.trim();
   const meta_description = (formData.get("meta_description") as string)?.trim();
+  const og_image_url = (formData.get("og_image_url") as string)?.trim() || null;
   const intro = (formData.get("intro") as string)?.trim();
   const locale = (formData.get("locale") as string)?.trim() || "en";
   const published = formData.get("published") === "on";
@@ -91,6 +92,7 @@ export async function createGrowthPage(
     locale,
     meta_title,
     meta_description,
+    og_image_url,
     h1,
     intro,
     sections,
@@ -126,6 +128,7 @@ export async function updateGrowthPage(
 
   const meta_title = (formData.get("meta_title") as string)?.trim();
   const meta_description = (formData.get("meta_description") as string)?.trim();
+  const og_image_url = (formData.get("og_image_url") as string)?.trim() || null;
   const intro = (formData.get("intro") as string)?.trim();
   const locale = (formData.get("locale") as string)?.trim() || "en";
   const published = formData.get("published") === "on";
@@ -144,6 +147,7 @@ export async function updateGrowthPage(
       locale,
       meta_title,
       meta_description,
+      og_image_url,
       h1,
       intro,
       sections,

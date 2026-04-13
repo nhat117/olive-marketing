@@ -4,12 +4,14 @@ import { useActionState, useState, useCallback } from "react";
 import type { Post } from "@/lib/types";
 import type { PostActionState } from "@/app/admin/(protected)/posts/actions";
 import { TiptapEditor } from "./TiptapEditor";
+import { SerpPreview } from "./SerpPreview";
+import { SocialCardPreview } from "./SocialCardPreview";
+import { SeoScore } from "./SeoScore";
 import {
   m3Checkbox,
   m3CodeChip,
   m3FieldFilled,
   m3FilledButton,
-  m3FilledButtonSm,
   m3Label,
   m3OutlinedButtonSm,
   m3ShapeLg,
@@ -42,56 +44,62 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function wordCount(html: string): number {
+  const text = stripHtml(html);
+  return text ? text.split(/\s+/).length : 0;
+}
+
 export function PostForm({ saveAction, post }: Props) {
   const [state, formAction, pending] = useActionState(saveAction, undefined);
   const [body, setBody] = useState(post?.body ?? "");
+  const [title, setTitle] = useState(post?.title ?? "");
+  const [slug, setSlug] = useState(post?.slug ?? "");
   const [metaTitle, setMetaTitle] = useState(post?.meta_title ?? "");
   const [metaDesc, setMetaDesc] = useState(post?.meta_description ?? "");
-  const [aiLoading, setAiLoading] = useState(false);
+  const [ogImage, setOgImage] = useState(post?.og_image_url ?? "");
+  const [coverImage, setCoverImage] = useState(post?.cover_image_url ?? "");
 
   const generateSeo = useCallback(() => {
-    setAiLoading(true);
-    try {
-      const plainText = stripHtml(body);
-      const titleEl = document.getElementById("title") as HTMLInputElement | null;
-      const title = titleEl?.value?.trim() ?? "";
+    const plainText = stripHtml(body);
 
-      // Generate meta title: use post title, add brand suffix
-      const generatedTitle = title
-        ? `${title.length > 50 ? title.slice(0, 50) + "..." : title} | Olive Marketing`
-        : "";
+    // Generate meta title: use post title + brand suffix
+    if (!metaTitle && title) {
+      const t = title.length > 50 ? title.slice(0, 50) + "..." : title;
+      setMetaTitle(`${t} | Olive Marketing`);
+    }
 
-      // Generate meta description: extract first meaningful sentence(s)
+    // Generate meta description: extract first meaningful sentences
+    if (!metaDesc && plainText) {
       const sentences = plainText
         .split(/(?<=[.!?])\s+/)
         .filter((s) => s.length > 20);
-      const generatedDesc =
+      const generated =
         sentences.length > 0
           ? sentences.slice(0, 2).join(" ").slice(0, 155)
           : plainText.slice(0, 155);
-
-      if (!metaTitle && generatedTitle) setMetaTitle(generatedTitle);
-      if (!metaDesc && generatedDesc) setMetaDesc(generatedDesc);
-    } finally {
-      setAiLoading(false);
+      setMetaDesc(generated);
     }
-  }, [body, metaTitle, metaDesc]);
+  }, [body, title, metaTitle, metaDesc]);
+
+  const siteUrl = typeof window !== "undefined"
+    ? (process.env.NEXT_PUBLIC_SITE_URL || window.location.origin)
+    : "";
+  const previewUrl = `${siteUrl}/blog/${slug || "your-slug"}`;
+  const previewImage = ogImage || coverImage;
 
   return (
     <form action={formAction} className="flex max-w-3xl flex-col gap-6">
-      {/* Hidden field for body HTML from Tiptap */}
       <input type="hidden" name="body" value={body} />
 
       {/* Title */}
       <div>
-        <label htmlFor="title" className={m3Label}>
-          Title
-        </label>
+        <label htmlFor="title" className={m3Label}>Title</label>
         <input
           id="title"
           name="title"
           required
-          defaultValue={post?.title ?? ""}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           className={m3FieldFilled}
           placeholder="Article title"
         />
@@ -99,26 +107,23 @@ export function PostForm({ saveAction, post }: Props) {
 
       {/* Slug */}
       <div>
-        <label htmlFor="slug" className={m3Label}>
-          Slug (URL)
-        </label>
+        <label htmlFor="slug" className={m3Label}>Slug (URL)</label>
         <input
           id="slug"
           name="slug"
           placeholder="auto-generated from title if empty"
-          defaultValue={post?.slug ?? ""}
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
           className={m3FieldFilled}
         />
         <p className="mt-1 font-body text-xs text-on-surface-variant">
-          The URL path: /blog/<span className="font-medium">your-slug</span>
+          The URL path: /blog/<span className="font-medium">{slug || "your-slug"}</span>
         </p>
       </div>
 
       {/* Excerpt */}
       <div>
-        <label htmlFor="excerpt" className={m3Label}>
-          Excerpt
-        </label>
+        <label htmlFor="excerpt" className={m3Label}>Excerpt</label>
         <textarea
           id="excerpt"
           name="excerpt"
@@ -144,20 +149,19 @@ export function PostForm({ saveAction, post }: Props) {
 
       {/* Cover Image */}
       <div>
-        <label htmlFor="cover_image_url" className={m3Label}>
-          Cover image URL
-        </label>
+        <label htmlFor="cover_image_url" className={m3Label}>Cover image URL</label>
         <input
           id="cover_image_url"
           name="cover_image_url"
           type="url"
           placeholder="https://images.unsplash.com/..."
-          defaultValue={post?.cover_image_url ?? ""}
+          value={coverImage}
+          onChange={(e) => setCoverImage(e.target.value)}
           className={m3FieldFilled}
         />
       </div>
 
-      {/* SEO Section */}
+      {/* ─── SEO Section ─── */}
       <fieldset
         className={`${m3ShapeLg} border-2 border-outline-variant/30 bg-surface-container-lowest/50 p-6 md:p-8`}
       >
@@ -166,24 +170,21 @@ export function PostForm({ saveAction, post }: Props) {
         </legend>
         <div className="mb-4 flex items-center justify-between">
           <p className="font-body text-xs text-on-surface-variant">
-            Control how this article appears in Google and when shared. Leave
-            blank to use the title, excerpt, and cover image.
+            Control how this article appears in Google and when shared.
           </p>
           <button
             type="button"
             onClick={generateSeo}
-            disabled={aiLoading || !body}
+            disabled={!body && !title}
             className={`${m3OutlinedButtonSm} ml-4 shrink-0`}
           >
-            {aiLoading ? "Generating..." : "AI suggest"}
+            AI suggest
           </button>
         </div>
         <div className="flex flex-col gap-5">
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="meta_title" className={m3Label}>
-                SEO title
-              </label>
+              <label htmlFor="meta_title" className={m3Label}>SEO title</label>
               <CharCount value={metaTitle} ideal="50-60" max={60} />
             </div>
             <input
@@ -198,9 +199,7 @@ export function PostForm({ saveAction, post }: Props) {
           </div>
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="meta_description" className={m3Label}>
-                Meta description
-              </label>
+              <label htmlFor="meta_description" className={m3Label}>Meta description</label>
               <CharCount value={metaDesc} ideal="150-160" max={160} />
             </div>
             <textarea
@@ -216,14 +215,15 @@ export function PostForm({ saveAction, post }: Props) {
           </div>
           <div>
             <label htmlFor="og_image_url" className={m3Label}>
-              Social share image URL
+              Social share image URL (Open Graph)
             </label>
             <input
               id="og_image_url"
               name="og_image_url"
               type="url"
-              placeholder="Optional; overrides cover for Open Graph / X"
-              defaultValue={post?.og_image_url ?? ""}
+              placeholder="1200x630px recommended; falls back to cover image"
+              value={ogImage}
+              onChange={(e) => setOgImage(e.target.value)}
               className={m3FieldFilled}
             />
           </div>
@@ -240,13 +240,35 @@ export function PostForm({ saveAction, post }: Props) {
               </span>
               <span className="mt-0.5 block text-xs text-on-surface-variant">
                 Sends <code className={m3CodeChip}>noindex</code> and removes
-                this URL from the sitemap and RSS (still public if someone has
-                the link).
+                from sitemap and RSS.
               </span>
             </span>
           </label>
         </div>
       </fieldset>
+
+      {/* ─── SEO Previews ─── */}
+      <div className="flex flex-col gap-4">
+        <SeoScore
+          title={metaTitle}
+          description={metaDesc}
+          hasImage={!!previewImage}
+          bodyLength={wordCount(body)}
+          slug={slug}
+        />
+        <SerpPreview
+          title={metaTitle || `${title} | Olive Marketing`}
+          description={metaDesc || post?.excerpt || ""}
+          url={previewUrl}
+          fallbackTitle={title || "Article Title"}
+        />
+        <SocialCardPreview
+          title={metaTitle || `${title} | Olive Marketing`}
+          description={metaDesc || post?.excerpt || ""}
+          imageUrl={previewImage}
+          fallbackTitle={title || "Article Title"}
+        />
+      </div>
 
       {/* Published */}
       <label className="flex items-center gap-3 font-body text-sm text-on-surface">
@@ -259,20 +281,14 @@ export function PostForm({ saveAction, post }: Props) {
         Published
       </label>
 
-      {/* Error */}
       {state?.error && (
         <p className="font-body text-sm text-error" role="alert">
           {state.error}
         </p>
       )}
 
-      {/* Submit */}
       <div className="flex items-center gap-4">
-        <button
-          type="submit"
-          disabled={pending}
-          className={`${m3FilledButton} w-fit`}
-        >
+        <button type="submit" disabled={pending} className={`${m3FilledButton} w-fit`}>
           {pending ? "Saving..." : "Save"}
         </button>
         <a
