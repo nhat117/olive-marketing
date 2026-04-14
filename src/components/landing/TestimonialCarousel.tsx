@@ -1,45 +1,62 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { m3ExpressiveTonalSurfaces } from "@/lib/material-landing";
+import { useEffect, useRef, useState } from "react";
 import { INQUIRY_TESTIMONIALS } from "@/lib/testimonials";
 
-const SLIDE_INTERVAL = 5000;
-const CARDS_PER_PAGE = 3;
-const totalPages = Math.ceil(INQUIRY_TESTIMONIALS.length / CARDS_PER_PAGE);
+/**
+ * Each card gets a unique tonal style — cycling through 5 color combos
+ * so the carousel feels rich and varied as it scrolls.
+ */
+const CARD_STYLES = [
+  /* 0 — olive / secondary */
+  "bg-secondary-container text-on-secondary-container border-secondary-container",
+  /* 1 — pink / tertiary */
+  "bg-tertiary-fixed/55 text-on-tertiary-fixed border-tertiary/25",
+  /* 2 — green / primary */
+  "bg-primary-fixed/60 text-on-primary-fixed-variant border-primary/25",
+  /* 3 — warm surface */
+  "bg-surface-container-high text-on-surface border-outline-variant/30",
+  /* 4 — deep primary */
+  "bg-primary-container text-on-primary-container border-on-primary-container/20",
+] as const;
+
+const SCROLL_SPEED = 0.5; // px per frame
 
 export function TestimonialCarousel() {
-  const [page, setPage] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const rafRef = useRef<number>(0);
+  const posRef = useRef(0);
 
-  const goTo = useCallback((p: number) => {
-    setPage(((p % totalPages) + totalPages) % totalPages);
-  }, []);
+  /* Duplicate the list so we can loop seamlessly */
+  const items = [...INQUIRY_TESTIMONIALS, ...INQUIRY_TESTIMONIALS];
 
-  /* auto-rotate */
   useEffect(() => {
-    if (paused) return;
-    timerRef.current = setInterval(() => {
-      setPage((prev) => (prev + 1) % totalPages);
-    }, SLIDE_INTERVAL);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [paused]);
+    const track = trackRef.current;
+    if (!track) return;
 
-  /* pause on reduced-motion preference */
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setPaused(true);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const halfWidth = track.scrollWidth / 2;
+
+    function tick() {
+      if (!paused) {
+        posRef.current += SCROLL_SPEED;
+        if (posRef.current >= halfWidth) {
+          posRef.current -= halfWidth;
+        }
+        track!.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
+      }
+      rafRef.current = requestAnimationFrame(tick);
     }
-  }, []);
 
-  const start = page * CARDS_PER_PAGE;
-  const visible = INQUIRY_TESTIMONIALS.slice(start, start + CARDS_PER_PAGE);
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [paused]);
 
   return (
     <div
+      className="relative overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -48,86 +65,37 @@ export function TestimonialCarousel() {
       aria-roledescription="carousel"
       aria-label="Client testimonials"
     >
-      {/* Cards */}
-      <ul
-        className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6"
-        aria-live="polite"
-      >
-        {visible.map((item, i) => {
-          const globalIndex = start + i;
-          return (
-            <li
-              key={`${page}-${item.name}`}
-              className="animate-[carousel-fade-in_0.5s_ease-out_both]"
-              style={{ animationDelay: `${i * 80}ms` }}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`Testimonial ${globalIndex + 1} of ${INQUIRY_TESTIMONIALS.length}`}
-            >
-              <figure
-                className={`flex h-full flex-col p-6 text-left md:p-8 ${m3ExpressiveTonalSurfaces[globalIndex % 3]}`}
-              >
-                <blockquote className="flex-1">
-                  <p className="font-headline text-base italic leading-snug md:text-lg lg:text-xl">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                </blockquote>
-                <figcaption className="mt-6 border-t border-current/20 pt-5">
-                  <p className="font-body text-sm font-semibold md:text-base">
-                    {item.name}
-                  </p>
-                  <p className="mt-1 font-body text-xs opacity-90 md:text-sm">
-                    {item.role}
-                  </p>
-                </figcaption>
-              </figure>
-            </li>
-          );
-        })}
-      </ul>
+      {/* Fade edges */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-surface to-transparent md:w-20" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-surface to-transparent md:w-20" />
 
-      {/* Dots + arrows */}
-      <nav
-        className="mt-8 flex items-center justify-center gap-4"
-        aria-label="Testimonial navigation"
+      {/* Scrolling track */}
+      <div
+        ref={trackRef}
+        className="flex gap-5 will-change-transform"
+        style={{ width: "max-content" }}
       >
-        <button
-          type="button"
-          onClick={() => goTo(page - 1)}
-          className="flex size-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-on-surface/10"
-          aria-label="Previous testimonials"
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            chevron_left
-          </span>
-        </button>
-        <div className="flex gap-2">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => goTo(i)}
-              aria-label={`Go to page ${i + 1}`}
-              aria-current={i === page ? "true" : undefined}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === page
-                  ? "w-6 bg-primary"
-                  : "w-2 bg-outline-variant hover:bg-on-surface/30"
-              }`}
-            />
-          ))}
-        </div>
-        <button
-          type="button"
-          onClick={() => goTo(page + 1)}
-          className="flex size-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-on-surface/10"
-          aria-label="Next testimonials"
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            chevron_right
-          </span>
-        </button>
-      </nav>
+        {items.map((item, i) => (
+          <figure
+            key={`${i}-${item.name}`}
+            className={`flex w-[300px] shrink-0 flex-col rounded-[32px] border-2 p-6 shadow-[0_8px_16px_rgba(54,69,25,0.1),0_24px_48px_-12px_rgba(27,28,25,0.18)] md:w-[360px] md:rounded-[40px] md:p-8 ${CARD_STYLES[i % CARD_STYLES.length]}`}
+          >
+            <blockquote className="flex-1">
+              <p className="font-headline text-base italic leading-snug md:text-lg">
+                &ldquo;{item.quote}&rdquo;
+              </p>
+            </blockquote>
+            <figcaption className="mt-6 border-t border-current/20 pt-5">
+              <p className="font-body text-sm font-semibold md:text-base">
+                {item.name}
+              </p>
+              <p className="mt-1 font-body text-xs opacity-90 md:text-sm">
+                {item.role}
+              </p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
     </div>
   );
 }
