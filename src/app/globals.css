@@ -346,6 +346,18 @@ body {
   text-decoration: line-through;
 }
 
+/* ─── Header slide-down entrance ─── */
+@keyframes header-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ─── Scroll-triggered animations (AnimateOnScroll) ─── */
 .aos {
   opacity: 0;

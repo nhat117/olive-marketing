@@ -2,7 +2,6 @@ import { getTranslations } from "next-intl/server";
 import { OpenLeadButton } from "@/components/leads/lead-modal";
 import { LocaleSwitcher } from "@/components/landing/LocaleSwitcher";
 import { MobileNav } from "@/components/landing/MobileNav";
-import { SmartHeader } from "@/components/landing/SmartHeader";
 import { Link } from "@/i18n/navigation";
 import { m3Elev2, m3FilledButtonSm } from "@/lib/material-landing";
 
@@ -10,10 +9,9 @@ export async function SiteHeader() {
   const t = await getTranslations("Nav");
 
   return (
-    <SmartHeader>
-      <nav
-        className={`fixed top-0 z-50 w-full border-b border-outline-variant/20 bg-surface/90 ${m3Elev2} backdrop-blur-md`}
-      >
+    <nav
+      className={`fixed top-0 z-50 w-full border-b border-outline-variant/20 bg-surface/90 ${m3Elev2} backdrop-blur-md animate-[header-slide-down_0.5s_cubic-bezier(0.2,0,0,1)_both]`}
+    >
         <div className="mx-auto flex max-w-[1920px] items-center justify-between gap-3 px-5 py-3 md:gap-4 md:px-10 md:py-3">
           <Link
             href="/"
@@ -59,7 +57,6 @@ export async function SiteHeader() {
             </div>
           </div>
         </div>
-      </nav>
-    </SmartHeader>
+    </nav>
   );
 }
