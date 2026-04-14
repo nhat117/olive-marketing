@@ -33,7 +33,7 @@ export async function HeroSection() {
       <HeroBackdrop videoUrl={videoUrl} posterUrl={posterUrl} />
 
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-background/92 via-background/78 to-background/62 md:bg-gradient-to-r md:from-background/88 md:from-[38%] md:via-background/42 md:via-[58%] md:to-transparent"
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-background/78 via-background/55 to-background/40 md:bg-gradient-to-r md:from-background/88 md:from-[38%] md:via-background/42 md:via-[58%] md:to-transparent"
         aria-hidden
       />
       <div
@@ -53,7 +53,8 @@ export async function HeroSection() {
             {t("headline")}
           </h1>
           <p className="hero-anim hero-anim-d3 mb-8 max-w-xl font-body text-base leading-relaxed text-on-surface max-md:mx-auto md:mb-10 md:text-lg md:text-on-surface-variant lg:text-xl [text-shadow:0_1px_2px_var(--color-background),0_0_16px_color-mix(in_srgb,var(--color-background)_55%,transparent)] md:[text-shadow:none]">
-            {t("sub")}
+            <span className="md:hidden">{t("subMobile")}</span>
+            <span className="hidden md:inline">{t("sub")}</span>
           </p>
           <div className="hero-anim hero-anim-d4 flex max-w-md flex-col items-stretch gap-3 max-md:mx-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center md:max-w-none md:justify-start md:gap-5">
             <OpenLeadButton

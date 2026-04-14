@@ -15,19 +15,35 @@ const NAV_ITEMS = [
 export function MobileNav() {
   const t = useTranslations("Nav");
   const [open, setOpen] = useState(false);
+  /* visible keeps the DOM mounted during the exit transition */
+  const [visible, setVisible] = useState(false);
   const panelId = useId();
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
   const close = useCallback(() => setOpen(false), []);
 
+  /* Mount before opening so the transition plays */
   useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
+    if (open) {
+      setVisible(true);
+    }
   }, [open]);
+
+  /* After close transition finishes, unmount */
+  const handleTransitionEnd = useCallback(() => {
+    if (!open) setVisible(false);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open && !visible) return;
+    if (open) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [open, visible]);
 
   useEffect(() => {
     if (!open) return;
@@ -39,7 +55,11 @@ export function MobileNav() {
   }, [open, close]);
 
   useEffect(() => {
-    if (open) firstLinkRef.current?.focus();
+    if (open) {
+      /* Small delay so the slide animation is visible */
+      const id = setTimeout(() => firstLinkRef.current?.focus(), 300);
+      return () => clearTimeout(id);
+    }
   }, [open]);
 
   const linkClass =
@@ -60,20 +80,29 @@ export function MobileNav() {
         </span>
       </button>
 
-      {open ? (
+      {visible && (
         <>
+          {/* Backdrop — fades in/out */}
           <button
             type="button"
-            className="fixed inset-0 z-[60] bg-on-surface/25 backdrop-blur-sm"
+            className={`fixed inset-0 z-[60] backdrop-blur-sm transition-[background-color,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${
+              open
+                ? "bg-on-surface/25 opacity-100"
+                : "bg-on-surface/0 opacity-0"
+            }`}
             aria-label={t("closeMenuBackdrop")}
             onClick={close}
           />
+          {/* Panel — slides from right */}
           <div
             id={panelId}
             role="dialog"
             aria-modal="true"
             aria-label={t("navDialogLabel")}
-            className="fixed right-0 top-0 z-[70] flex h-[100dvh] w-[min(100%,18rem)] flex-col border-l border-outline-variant/25 bg-surface pt-14 shadow-[0_8px_40px_-8px_rgba(27,28,25,0.15)]"
+            onTransitionEnd={handleTransitionEnd}
+            className={`fixed right-0 top-0 z-[70] flex h-[100dvh] w-[min(100%,18rem)] flex-col border-l border-outline-variant/25 bg-surface pt-14 shadow-[0_8px_40px_-8px_rgba(27,28,25,0.15)] transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${
+              open ? "translate-x-0" : "translate-x-full"
+            }`}
           >
             <div className="border-b border-outline-variant/20 px-4 py-3">
               <LocaleSwitcher variant="drawer" onLocaleChange={close} />
@@ -93,7 +122,7 @@ export function MobileNav() {
             </nav>
           </div>
         </>
-      ) : null}
+      )}
     </div>
   );
 }
