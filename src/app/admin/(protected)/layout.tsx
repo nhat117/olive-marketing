@@ -9,6 +9,7 @@ const navItems = [
   { href: "/admin/posts", label: "Posts", icon: "article" },
   { href: "/admin/growth", label: "Growth pages", icon: "travel_explore" },
   { href: "/admin/leads", label: "Leads", icon: "contact_mail" },
+  { href: "/admin/seo", label: "Homepage SEO", icon: "search" },
   { href: "/admin/contact", label: "Settings", icon: "settings" },
 ];
 

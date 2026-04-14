@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { AnimateOnScroll } from "@/components/animations/AnimateOnScroll";
+import { TestimonialCarousel } from "@/components/landing/TestimonialCarousel";
 import { OpenLeadButton } from "@/components/leads/lead-modal";
 import {
   m3Elev3,
-  m3ExpressiveTonalSurfaces,
   m3FilledButton,
   m3Overline,
   m3OverlineAccent,
@@ -12,7 +12,6 @@ import {
   m3TransitionExpressive,
 } from "@/lib/material-landing";
 import { getSiteContact } from "@/lib/site-contact";
-import { INQUIRY_TESTIMONIALS } from "@/lib/testimonials";
 
 export async function InquirySection() {
   const t = await getTranslations("Inquiry");
@@ -26,31 +25,9 @@ export async function InquirySection() {
         <p className={`${m3OverlineAccent} mb-6 text-center md:mb-10`}>
           {t("testimonialsOverline")}
         </p>
-        <ul className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
-          {INQUIRY_TESTIMONIALS.map((item, i) => (
-            <li key={item.name}>
-              <AnimateOnScroll animation="fade-up" delay={i * 150}>
-              <figure
-                className={`flex h-full flex-col p-6 text-left md:p-8 ${m3ExpressiveTonalSurfaces[i % 3]}`}
-              >
-                <blockquote className="flex-1">
-                  <p className="font-headline text-base italic leading-snug md:text-lg lg:text-xl">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                </blockquote>
-                <figcaption className="mt-6 border-t border-current/20 pt-5">
-                  <p className="font-body text-sm font-semibold md:text-base">
-                    {item.name}
-                  </p>
-                  <p className="mt-1 font-body text-xs opacity-90 md:text-sm">
-                    {item.role}
-                  </p>
-                </figcaption>
-              </figure>
-              </AnimateOnScroll>
-            </li>
-          ))}
-        </ul>
+        <AnimateOnScroll animation="fade-up">
+          <TestimonialCarousel />
+        </AnimateOnScroll>
       </div>
 
       <AnimateOnScroll animation="scale-up" delay={100}>
