@@ -88,6 +88,10 @@ export const m3GlassElevated =
 export const m3GlassPrimary =
   `${m3ShapeXl} border border-white/30 bg-primary-container/[0.34] backdrop-blur-[56px] backdrop-saturate-150 text-on-primary-container ring-1 ring-inset ring-white/22 shadow-[inset_0_1px_1px_rgba(255,255,255,0.32),0_14px_48px_-14px_rgba(27,28,25,0.18)]`;
 
+/** Soft pink / tertiary-tinted glass card */
+export const m3GlassTertiary =
+  `${m3ShapeXl} border border-white/25 bg-tertiary-fixed/[0.22] backdrop-blur-[56px] backdrop-saturate-150 text-on-surface ring-1 ring-inset ring-white/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.55),inset_0_-1px_0_rgba(88,52,84,0.06),0_12px_48px_-16px_rgba(27,28,25,0.11)]`;
+
 /** Solid primary tonal surface — max contrast for body copy vs translucent glass cards. */
 export const m3TonalPrimaryCard =
   `${m3ShapeXl} border border-on-primary-container/25 bg-primary-container text-on-primary-container shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_12px_40px_-12px_rgba(27,28,25,0.32)] ring-1 ring-inset ring-white/18`;

@@ -7,6 +7,7 @@ import {
   m3Elev2,
   m3FilledButtonSm,
   m3GlassElevated,
+  m3GlassTertiary,
   m3OverlineAccent,
   m3Section,
   m3ShapeXl,
@@ -92,16 +93,16 @@ export async function SolutionsSection() {
 
           <AnimateOnScroll animation="fade-up" delay={200} className="lg:col-span-5">
           <article
-            className={`relative flex min-h-[300px] flex-col justify-between overflow-hidden p-6 md:min-h-[340px] md:p-8 lg:min-h-[360px] ${m3GlassElevated} ${m3TransitionExpressive}`}
+            className={`relative flex min-h-[300px] flex-col justify-between overflow-hidden p-6 md:min-h-[340px] md:p-8 lg:min-h-[360px] ${m3GlassTertiary} ${m3TransitionExpressive}`}
           >
             <span
-              className="pointer-events-none absolute -right-1 top-0 font-headline text-[clamp(4.5rem,12vw,7.5rem)] leading-none italic text-primary/10 select-none"
+              className="pointer-events-none absolute -right-1 top-0 font-headline text-[clamp(4.5rem,12vw,7.5rem)] leading-none italic text-tertiary/15 select-none"
               aria-hidden
             >
               02
             </span>
             <div className="relative z-10">
-              <span className="mb-2 block font-headline text-4xl italic leading-none text-primary md:mb-3 md:text-5xl">
+              <span className="mb-2 block font-headline text-4xl italic leading-none text-tertiary md:mb-3 md:text-5xl">
                 02
               </span>
               <h4 className="mb-4 font-headline text-2xl font-normal leading-[1.15] tracking-tight text-on-surface md:mb-5 md:text-3xl lg:text-4xl">
