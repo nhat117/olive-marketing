@@ -49,7 +49,7 @@ export async function SolutionsSection() {
               {t("title")}
             </h2>
           </div>
-          <Link href="/blog" className={`${m3FilledButtonSm} shrink-0`}>
+          <Link href="/process" className={`${m3FilledButtonSm} shrink-0`}>
             {t("seeHow")}
           </Link>
         </header>
