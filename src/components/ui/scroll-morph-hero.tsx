@@ -79,6 +79,7 @@ type ImageItem = { src: string; alt: string };
 
 export type ScrollMorphHeroProps = {
     images: ImageItem[];
+    brand?: string;
     introHeadline: string;
     introSub: string;
     arcHeadline: string;
@@ -99,6 +100,7 @@ const hashRandom = (seed: number) => {
 
 export default function ScrollMorphHero({
     images,
+    brand,
     introHeadline,
     introSub,
     arcHeadline,
@@ -262,8 +264,22 @@ export default function ScrollMorphHero({
             className="relative w-full h-full bg-surface overflow-hidden"
         >
             <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
-                {/* Intro text (fades out on scroll) */}
-                <div className="absolute z-0 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2 px-6">
+                {/* Intro text — sits in the clear center of the circle */}
+                <div className="absolute z-20 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2 px-6 max-w-[min(90%,34rem)]">
+                    {brand ? (
+                        <motion.p
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={
+                                introPhase === "circle" && morphValue < 0.5
+                                    ? { opacity: 1 - morphValue * 2, y: 0 }
+                                    : { opacity: 0 }
+                            }
+                            transition={{ duration: 1 }}
+                            className="mb-4 md:mb-5 font-label text-[0.65rem] md:text-xs font-semibold tracking-[0.32em] uppercase text-on-surface-variant/80"
+                        >
+                            {brand}
+                        </motion.p>
+                    ) : null}
                     <motion.h1
                         initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
                         animate={
@@ -272,7 +288,7 @@ export default function ScrollMorphHero({
                                 : { opacity: 0, filter: "blur(10px)" }
                         }
                         transition={{ duration: 1 }}
-                        className="font-display italic text-3xl md:text-6xl tracking-tight text-primary leading-[0.98]"
+                        className="font-display italic text-[2rem] md:text-[3.75rem] lg:text-[4.5rem] tracking-tight text-primary leading-[0.98]"
                     >
                         {introHeadline}
                     </motion.h1>
@@ -280,11 +296,11 @@ export default function ScrollMorphHero({
                         initial={{ opacity: 0 }}
                         animate={
                             introPhase === "circle" && morphValue < 0.5
-                                ? { opacity: 0.6 - morphValue }
+                                ? { opacity: 0.75 - morphValue }
                                 : { opacity: 0 }
                         }
                         transition={{ duration: 1, delay: 0.2 }}
-                        className="mt-5 font-label text-[0.65rem] md:text-xs font-semibold tracking-[0.28em] uppercase text-on-surface-variant"
+                        className="mt-5 md:mt-6 font-label text-[0.65rem] md:text-xs font-semibold tracking-[0.28em] uppercase text-on-surface-variant"
                     >
                         {introSub}
                     </motion.p>
@@ -324,7 +340,9 @@ export default function ScrollMorphHero({
                                 containerSize.height,
                             );
 
-                            const circleRadius = Math.min(minDimension * 0.35, 350);
+                            // Bigger outer circle so the text block fits cleanly in the middle
+                            // without the flip cards overlapping the headline.
+                            const circleRadius = Math.min(minDimension * 0.48, 460);
                             const circleAngle = (i / totalImages) * 360;
                             const circleRad = (circleAngle * Math.PI) / 180;
                             const circlePos = {

@@ -15,6 +15,7 @@ export async function HeroSection() {
     <section className="relative h-[100svh] min-h-[640px]">
       <ScrollMorphHero
         images={[...HERO_GALLERY_IMAGES]}
+        brand="Olive Marketing"
         introHeadline={t("headline")}
         introSub={t("overline")}
         arcHeadline={t("quote")}
