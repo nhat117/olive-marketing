@@ -1,16 +1,17 @@
-/**
- * High-quality stock stills (Unsplash). License: https://unsplash.com/license
- * Large widths + quality for crisp `next/image` optimization.
- */
-const q = "auto=format&fit=crop&w=2400&q=90";
+import { PEXELS } from "@/lib/pexels-images";
 
+/**
+ * Editorial stills sourced from Pexels (free license, no attribution required).
+ * Keeping a stable key map so the wider codebase can reference stock imagery
+ * without hard-coding URLs.
+ */
 export const LANDING_STOCK_IMAGES = {
   /** Hero poster fallback & reduced-motion backdrop — salon / styling */
-  heroPoster: `https://images.unsplash.com/photo-1560066984-138dadb4c035?${q}`,
+  heroPoster: PEXELS.heroStyling,
   /** Philosophy grid — skincare / treatment still */
-  philosophyAccent: `https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?${q}`,
+  philosophyAccent: PEXELS.philosophySkincare,
   /** Services — booking / mobile context */
-  servicesBooking: `https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?${q}`,
+  servicesBooking: PEXELS.servicesBooking,
   /** Services — full-width strip — spa / calm interior */
-  servicesBanner: `https://images.unsplash.com/photo-1544161515-4ab6ce6db874?${q}`,
+  servicesBanner: PEXELS.servicesSpa,
 } as const;

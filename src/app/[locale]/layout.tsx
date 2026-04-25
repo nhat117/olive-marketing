@@ -3,7 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { FacebookPixel } from "@/components/analytics/FacebookPixel";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
-import { Manrope, Newsreader } from "next/font/google";
+import { Manrope, Newsreader, Playfair_Display } from "next/font/google";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LeadFormProvider } from "@/components/leads/lead-modal";
@@ -22,6 +22,13 @@ const newsreader = Newsreader({
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export function generateStaticParams() {
@@ -89,7 +96,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
-      className={`${newsreader.variable} ${manrope.variable} scroll-smooth antialiased`}
+      className={`${newsreader.variable} ${manrope.variable} ${playfair.variable} scroll-smooth antialiased`}
     >
       <head>
         <link

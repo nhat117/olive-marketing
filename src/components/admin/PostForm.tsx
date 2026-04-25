@@ -154,7 +154,7 @@ export function PostForm({ saveAction, post }: Props) {
           id="cover_image_url"
           name="cover_image_url"
           type="url"
-          placeholder="https://images.unsplash.com/..."
+          placeholder="https://images.pexels.com/..."
           value={coverImage}
           onChange={(e) => setCoverImage(e.target.value)}
           className={m3FieldFilled}

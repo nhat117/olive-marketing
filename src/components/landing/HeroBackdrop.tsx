@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { ParallaxY } from "@/components/landing/ParallaxY";
 import { HERO_DEFAULT_POSTER_URL } from "@/lib/hero-defaults";
 
 type Props = {
@@ -10,6 +9,10 @@ type Props = {
   posterUrl?: string;
 };
 
+/**
+ * Plain full-bleed backdrop. Sits inside HeroContent's sticky transforming
+ * layer, which drives scale, blur, drift, and opacity in response to scroll.
+ */
 export function HeroBackdrop({
   videoUrl,
   posterUrl = HERO_DEFAULT_POSTER_URL,
@@ -22,43 +25,39 @@ export function HeroBackdrop({
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       aria-hidden
     >
-      <ParallaxY speed={0.24} className="h-full w-full">
-        <div className="relative h-[122%] min-h-[122%] w-full -translate-y-[9%]">
-          {hasVideo ? (
-            <>
-              <video
-                className="hero-backdrop-video absolute inset-0 h-full w-full object-cover"
-                src={src}
-                poster={posterUrl}
-                muted
-                loop
-                playsInline
-                autoPlay
-                preload="auto"
-              />
-              <div className="hero-backdrop-poster absolute inset-0">
-                <Image
-                  src={posterUrl}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  priority
-                />
-              </div>
-            </>
-          ) : (
+      {hasVideo ? (
+        <>
+          <video
+            className="hero-backdrop-video absolute inset-0 h-full w-full object-cover"
+            src={src}
+            poster={posterUrl}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="auto"
+          />
+          <div className="hero-backdrop-poster absolute inset-0">
             <Image
               src={posterUrl}
-              alt="Salon or spa interior with soft natural light—editorial style"
+              alt=""
               fill
               className="object-cover"
               sizes="100vw"
               priority
             />
-          )}
-        </div>
-      </ParallaxY>
+          </div>
+        </>
+      ) : (
+        <Image
+          src={posterUrl}
+          alt="Salon or spa interior with soft natural light—editorial style"
+          fill
+          className="object-cover"
+          sizes="100vw"
+          priority
+        />
+      )}
     </div>
   );
 }

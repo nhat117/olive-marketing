@@ -1,10 +1,18 @@
 import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  EditorialFeature,
+  EDITORIAL_ROWS,
+} from "@/components/landing/EditorialFeature";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { InquirySection } from "@/components/landing/InquirySection";
+import { MarqueeBand } from "@/components/landing/MarqueeBand";
 import { PhilosophySection } from "@/components/landing/PhilosophySection";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SolutionsSection } from "@/components/landing/SolutionsSection";
+import { StatsStrip } from "@/components/landing/StatsStrip";
+import { CursorSpotlight } from "@/components/motion/CursorSpotlight";
+import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { buildOrganizationJsonLd } from "@/lib/seo/article-json-ld";
 import { getHomepageSeo } from "@/lib/homepage-seo";
 import { absoluteUrlLocalized } from "@/lib/locale-path";
@@ -56,6 +64,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+const MARQUEE_WORDS = [
+  "Salons",
+  "Spas",
+  "Beauty",
+  "Nail Studios",
+  "Wellness",
+  "Aesthetics",
+  "Med-Spas",
+  "Bookings",
+  "Growth",
+  "Content",
+] as const;
+
+const STATS = [
+  { value: 120, suffix: "+", label: "Beauty & wellness brands served" },
+  { value: 4, suffix: "×", label: "Average lift in qualified bookings" },
+  { value: 35, suffix: "%", label: "Reduction in no-shows, on average" },
+  { value: 10, suffix: "+", label: "Years building for salons & spas" },
+] as const;
+
 export default async function Home({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -65,10 +93,20 @@ export default async function Home({ params }: Props) {
       <JsonLd
         data={buildOrganizationJsonLd(absoluteUrlLocalized("/", locale))}
       />
+      <ScrollProgress />
+      <CursorSpotlight />
       <SiteHeader />
       <main className="bg-gradient-to-b from-surface via-primary-fixed/[0.05] to-surface-container-low">
         <HeroSection />
+        <MarqueeBand items={MARQUEE_WORDS} />
         <PhilosophySection />
+        <EditorialFeature
+          eyebrow="The method"
+          title="Work that feels |editorial|, numbers that read like a boardroom."
+          lead="Three disciplines, one team. Brand voice, content, and booking systems shipped together so every client touchpoint drives revenue."
+          rows={EDITORIAL_ROWS}
+        />
+        <StatsStrip items={STATS} eyebrow="By the numbers" />
         <SolutionsSection />
         <InquirySection />
       </main>

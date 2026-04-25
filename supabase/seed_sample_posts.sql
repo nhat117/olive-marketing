@@ -1,7 +1,7 @@
 -- Sample published posts for Olive Marketing (beauty / wellness tone).
 -- Run in Supabase SQL Editor after migrations 001–003. Safe to re-run only if you delete conflicting slugs first.
 --
--- Cover + inline images use Unsplash (allowed in next.config.ts remotePatterns).
+-- Cover + inline images use Pexels (allowed in next.config.ts remotePatterns).
 
 insert into public.posts (
   slug,
@@ -37,7 +37,7 @@ No-shows hurt revenue and morale. The fix is rarely “send more texts”—it�
 
 State your window plainly: *“Cancellations within 24 hours may be subject to a fee.”* Avoid shaming copy; it trains clients to ignore future messages.
 
-![Hands at a reception desk scheduling an appointment](https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&q=80)
+![Hands at a reception desk scheduling an appointment](https://images.pexels.com/photos/5712643/pexels-photo-5712643.jpeg?auto=compress&cs=tinysrgb&w=1200)
 
 ## Measure what matters
 
@@ -47,7 +47,7 @@ Track **confirmation rate**, **reschedule rate**, and **no-show % by service typ
 
 *Olive Marketing helps beauty and wellness brands wire booking tools, reminders, and win-back flows to real numbers—consultations booked, not just clicks.*
     $markdown$,
-    'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1600&q=80',
+    'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1600',
     'Reduce no-shows: booking reminders for salons & spas',
     'Reminder timing, tone, and policy copy that cut no-shows for salons, spas, and appointment-based beauty businesses.',
     true,
@@ -77,7 +77,7 @@ Name **2–4 anchor treatments** you want to grow. “Injectables,” “skin re
 - Real photography of your space or team (stock is fine short-term; real wins long-term)
 - A short line on **safety** or **consultation-first** approach if that’s how you work
 
-![Minimal spa treatment room with soft light](https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1200&q=80)
+![Minimal spa treatment room with soft light](https://images.pexels.com/photos/3865554/pexels-photo-3865554.jpeg?auto=compress&cs=tinysrgb&w=1200)
 
 ## 4. Location + hours (mobile-first)
 
@@ -93,7 +93,7 @@ Med-spa clients often search on phones. **City/neighborhood**, **parking**, and 
 
 *Need a homepage pass that matches your brand guidelines and booking stack? That’s what we build with teams like yours.*
     $markdown$,
-    'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1600&q=80',
+    'https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=1600',
     'Med-spa homepage checklist | Olive Marketing',
     'What to put above the fold on a med-spa or aesthetics site: CTAs, services, trust, and mobile-friendly essentials.',
     true,
@@ -123,7 +123,7 @@ Measure **leads and bookings**, not vanity reach. Good paid setups tie creative 
 - A landing page or booking flow that matches the ad
 - A geographic radius that matches how far clients actually travel
 
-![Planning social content on a phone](https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&q=80)
+![Planning social content on a phone](https://images.pexels.com/photos/7256120/pexels-photo-7256120.jpeg?auto=compress&cs=tinysrgb&w=1200)
 
 ## A simple split for busy teams
 
@@ -139,7 +139,7 @@ If your booking software, phone tree, or follow-up is leaky, ads only speed up t
 
 *We plan and run paid + organic for beauty and wellness brands with reporting tied to inquiries and appointments—not likes alone.*
     $markdown$,
-    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1600&q=80',
+    'https://images.pexels.com/photos/3373747/pexels-photo-3373747.jpeg?auto=compress&cs=tinysrgb&w=1600',
     'Organic vs paid social for salons & med-spas',
     'How salons, spas, and aesthetics practices should think about organic content versus paid social when the goal is appointments.',
     true,
