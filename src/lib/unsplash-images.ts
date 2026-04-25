@@ -33,9 +33,6 @@ export const UNSPLASH = {
 
   /** Inquiry — golden-hour salon window */
   inquirySalon: `https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?${q}`,
-
-  /** Grain-texture overlay (small, for CSS background-image) */
-  grainTexture: `https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=40`,
 } as const;
 
 export type UnsplashKey = keyof typeof UNSPLASH;
