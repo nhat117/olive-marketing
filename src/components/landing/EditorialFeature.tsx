@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import { useRef } from "react";
 import { Reveal } from "@/components/motion/Reveal";
-import { PEXELS } from "@/lib/pexels-images";
+import { UNSPLASH } from "@/lib/unsplash-images";
 
 type Row = {
   number: string;
@@ -159,7 +159,7 @@ export const EDITORIAL_ROWS = [
     eyebrow: "Positioning & brand",
     title: "A voice that actually sounds like your chair.",
     body: "We sit with founders, artists, and front-desk teams until your tone, visuals, and menu read like one studio — not a stock template. Every page, caption, and follow-up inherits that voice.",
-    image: PEXELS.featureStylist,
+    image: UNSPLASH.featureStylist,
     alt: "Stylist working with a client in natural light",
   },
   {
@@ -167,7 +167,7 @@ export const EDITORIAL_ROWS = [
     eyebrow: "Content & paid social",
     title: "Content designed around the services you sell.",
     body: "Reels, carousels, and ads are briefed from your calendar — peak services, slow days, retail pushes. Creatives ship in editorial systems, not one-off graphics.",
-    image: PEXELS.featureMakeup,
+    image: UNSPLASH.featureMakeup,
     alt: "Editorial makeup product flatlay",
   },
   {
@@ -175,7 +175,7 @@ export const EDITORIAL_ROWS = [
     eyebrow: "Sites & booking flows",
     title: "Booking that reads like a concierge, not a form.",
     body: "Pages load fast, menus explain outcomes, and every path ends in a booked appointment or a captured message — with reminders and win-backs tuned to your stack.",
-    image: PEXELS.servicesSpa,
+    image: UNSPLASH.servicesSpa,
     alt: "Calm modern spa interior",
   },
 ] as const;

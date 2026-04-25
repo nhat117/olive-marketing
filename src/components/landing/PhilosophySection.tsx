@@ -2,7 +2,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/motion/Reveal";
 import { TiltCard } from "@/components/motion/TiltCard";
-import { PEXELS } from "@/lib/pexels-images";
+import { UNSPLASH } from "@/lib/unsplash-images";
 import {
   m3Elev2,
   m3Elev3,
@@ -85,7 +85,7 @@ export async function PhilosophySection() {
                     className={`group relative flex min-h-[260px] flex-col justify-end overflow-hidden ${m3ShapeXl} border-2 border-tertiary/20 bg-surface p-6 ring-1 ring-outline-variant/30 ${m3Elev2} md:min-h-[320px] md:p-8`}
                   >
                     <Image
-                      src={PEXELS.philosophySkincare}
+                      src={UNSPLASH.philosophySkincare}
                       alt={t("imageAlt")}
                       fill
                       className="object-cover opacity-25 transition-all duration-700 group-hover:scale-[1.05] group-hover:opacity-55"

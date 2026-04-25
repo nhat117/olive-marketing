@@ -4,7 +4,7 @@ import { FloatY } from "@/components/motion/FloatY";
 import { Reveal } from "@/components/motion/Reveal";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { Link } from "@/i18n/navigation";
-import { PEXELS } from "@/lib/pexels-images";
+import { UNSPLASH } from "@/lib/unsplash-images";
 import {
   m3Elev2,
   m3FilledButtonSm,
@@ -84,7 +84,7 @@ export async function SolutionsSection() {
                     className={`aspect-[16/10] w-full overflow-hidden ${m3ShapeXl} border border-white/20 bg-surface-container-lowest/35 shadow-[inset_0_1px_1px_rgba(255,255,255,0.45)] ring-1 ring-inset ring-white/25 backdrop-blur-md backdrop-saturate-125`}
                   >
                     <Image
-                      src={PEXELS.servicesBooking}
+                      src={UNSPLASH.servicesBooking}
                       alt={t("bookingImageAlt")}
                       fill
                       className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.2,0,0,1)] hover:scale-[1.06]"
@@ -154,7 +154,7 @@ export async function SolutionsSection() {
             >
               <FloatY range={[-40, 40]} className="absolute inset-0">
                 <Image
-                  src={PEXELS.servicesSpa}
+                  src={UNSPLASH.servicesSpa}
                   alt={t("bannerImageAlt")}
                   fill
                   className="scale-[1.12] object-cover transition-transform duration-700 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.16]"

@@ -1,33 +1,33 @@
 /**
- * Curated Pexels editorial stills for the scroll-morph hero gallery.
+ * Curated Unsplash editorial stills for the scroll-morph hero gallery.
  * Theme: salons, spas, nail studios, beauty & wellness — matches Olive Marketing's client mix.
  *
- * Pexels license: free for commercial + editorial use, no attribution required.
- * Query params: auto=compress&cs=tinysrgb&w=400 — same sizing convention as the rest of the codebase.
+ * All photo IDs below were HEAD-verified 200 OK before landing.
+ * Unsplash license: free for commercial + editorial use, no attribution required.
  */
 export type HeroGalleryImage = { src: string; alt: string };
 
-const sizing = "auto=compress&cs=tinysrgb&w=400";
+const sizing = "w=400&q=80&auto=format&fit=crop";
 
 export const HERO_GALLERY_IMAGES: readonly HeroGalleryImage[] = [
-    { src: `https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?${sizing}`, alt: "Salon stylist finishing a blowout in soft editorial light" },
-    { src: `https://images.pexels.com/photos/3065209/pexels-photo-3065209.jpeg?${sizing}`, alt: "Stylist at work in a salon chair" },
-    { src: `https://images.pexels.com/photos/3997383/pexels-photo-3997383.jpeg?${sizing}`, alt: "Manicurist applying polish in a nail studio" },
-    { src: `https://images.pexels.com/photos/3997391/pexels-photo-3997391.jpeg?${sizing}`, alt: "Hands treatment close-up — wellness detail" },
-    { src: `https://images.pexels.com/photos/3865554/pexels-photo-3865554.jpeg?${sizing}`, alt: "Calm spa treatment room with warm tones" },
-    { src: `https://images.pexels.com/photos/5069439/pexels-photo-5069439.jpeg?${sizing}`, alt: "Skincare editorial still on muted backdrop" },
-    { src: `https://images.pexels.com/photos/7256120/pexels-photo-7256120.jpeg?${sizing}`, alt: "Editorial beauty product flatlay" },
-    { src: `https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?${sizing}`, alt: "Spa interior with warm marble details" },
-    { src: `https://images.pexels.com/photos/3373747/pexels-photo-3373747.jpeg?${sizing}`, alt: "Minimal makeup product arrangement" },
-    { src: `https://images.pexels.com/photos/5712643/pexels-photo-5712643.jpeg?${sizing}`, alt: "Phone booking on a stone counter" },
-    { src: `https://images.pexels.com/photos/3065171/pexels-photo-3065171.jpeg?${sizing}`, alt: "Golden-hour salon window" },
-    { src: `https://images.pexels.com/photos/3997389/pexels-photo-3997389.jpeg?${sizing}`, alt: "Wellness product detail — skincare editorial" },
-    { src: `https://images.pexels.com/photos/3997388/pexels-photo-3997388.jpeg?${sizing}`, alt: "Serene spa still life" },
-    { src: `https://images.pexels.com/photos/3997385/pexels-photo-3997385.jpeg?${sizing}`, alt: "Beauty ritual — soft-lit product pour" },
-    { src: `https://images.pexels.com/photos/3738347/pexels-photo-3738347.jpeg?${sizing}`, alt: "Makeup artist at work with brush and palette" },
-    { src: `https://images.pexels.com/photos/3997381/pexels-photo-3997381.jpeg?${sizing}`, alt: "Clean skincare flatlay on linen" },
-    { src: `https://images.pexels.com/photos/3738349/pexels-photo-3738349.jpeg?${sizing}`, alt: "Stylist consultation — warm editorial mood" },
-    { src: `https://images.pexels.com/photos/3997377/pexels-photo-3997377.jpeg?${sizing}`, alt: "Modern salon interior — light neutral palette" },
-    { src: `https://images.pexels.com/photos/3738345/pexels-photo-3738345.jpeg?${sizing}`, alt: "Beauty close-up — lashes / brow detail" },
-    { src: `https://images.pexels.com/photos/3997387/pexels-photo-3997387.jpeg?${sizing}`, alt: "Minimal wellness product on neutral surface" },
+    { src: `https://images.unsplash.com/photo-1562322140-8baeececf3df?${sizing}`, alt: "Salon stylist finishing a balayage blowout" },
+    { src: `https://images.unsplash.com/photo-1560066984-138dadb4c035?${sizing}`, alt: "Hair salon interior with warm editorial light" },
+    { src: `https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?${sizing}`, alt: "Manicurist applying polish at a nail studio" },
+    { src: `https://images.unsplash.com/photo-1604654894610-df63bc536371?${sizing}`, alt: "Minimalist nail art detail on gel manicure" },
+    { src: `https://images.unsplash.com/photo-1540555700478-4be289fbecef?${sizing}`, alt: "Spa treatment with warm towels and candlelight" },
+    { src: `https://images.unsplash.com/photo-1470259078422-826894b933aa?${sizing}`, alt: "Facial skincare treatment in progress" },
+    { src: `https://images.unsplash.com/photo-1515377905703-c4788e51af15?${sizing}`, alt: "Beauty product arrangement on neutral surface" },
+    { src: `https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?${sizing}`, alt: "Stylist tools laid out on a marble vanity" },
+    { src: `https://images.unsplash.com/photo-1583001931096-959e9a1a6223?${sizing}`, alt: "Serene spa interior with soft neutral palette" },
+    { src: `https://images.unsplash.com/photo-1519014816548-bf5fe059798b?${sizing}`, alt: "Makeup artist at work with brush and palette" },
+    { src: `https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?${sizing}`, alt: "Close-up beauty editorial — lip detail" },
+    { src: `https://images.unsplash.com/photo-1571875257727-256c39da42af?${sizing}`, alt: "Aesthetic clinic room detail with treatment chair" },
+    { src: `https://images.unsplash.com/photo-1522337094846-8a818192de1f?${sizing}`, alt: "Pedicure service at a nail studio" },
+    { src: `https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?${sizing}`, alt: "Modern salon chair against textured wall" },
+    { src: `https://images.unsplash.com/photo-1559599101-f09722fb4948?${sizing}`, alt: "Serum dropper over a ceramic dish — skincare editorial" },
+    { src: `https://images.unsplash.com/photo-1503236823255-94609f598e71?${sizing}`, alt: "Client reviewing service menu on a tablet" },
+    { src: `https://images.unsplash.com/photo-1616394158624-a2ba9cfe2994?${sizing}`, alt: "Hair washing basin with plush white towel" },
+    { src: `https://images.unsplash.com/photo-1600948836101-f9ffda59d250?${sizing}`, alt: "Lash extension service — eye detail close-up" },
+    { src: `https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?${sizing}`, alt: "Nail polish bottles in a curated color grid" },
+    { src: `https://images.unsplash.com/photo-1552693673-1bf958298935?${sizing}`, alt: "Candle and florals styled for a spa consultation" },
 ] as const;

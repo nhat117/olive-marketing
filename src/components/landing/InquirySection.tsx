@@ -4,7 +4,7 @@ import { Magnetic } from "@/components/motion/Magnetic";
 import { Reveal } from "@/components/motion/Reveal";
 import { TestimonialCarousel } from "@/components/landing/TestimonialCarousel";
 import { OpenLeadButton } from "@/components/leads/lead-modal";
-import { PEXELS } from "@/lib/pexels-images";
+import { UNSPLASH } from "@/lib/unsplash-images";
 import {
   m3FilledButton,
   m3Overline,
@@ -40,7 +40,7 @@ export async function InquirySection() {
           className={`relative mx-auto max-w-6xl overflow-hidden ${m3ShapeExpressive} shadow-[0_32px_80px_-24px_rgba(27,28,25,0.45)] ring-1 ring-white/15`}
         >
           <Image
-            src={PEXELS.inquirySalon}
+            src={UNSPLASH.inquirySalon}
             alt=""
             fill
             className="object-cover"

@@ -35,7 +35,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 5. **Authentication → URL configuration**: set **Site URL** to your production domain (and add `http://localhost:3000` for local dev). Add the same URLs under **Redirect URLs** if you use email confirmation links.
 
-**Optional sample articles (covers + inline Pexels images):** run [`supabase/seed_sample_posts.sql`](supabase/seed_sample_posts.sql) in the SQL Editor. It inserts three published posts if those slugs do not already exist (`on conflict do nothing`).
+**Optional sample articles (covers + inline Unsplash images):** run [`supabase/seed_sample_posts.sql`](supabase/seed_sample_posts.sql) in the SQL Editor. It inserts three published posts if those slugs do not already exist (`on conflict do nothing`).
 
 ## Deploy to Vercel + Supabase (production)
 
