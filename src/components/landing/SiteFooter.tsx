@@ -1,6 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getSiteContact } from "@/lib/site-contact";
+import {
+  OLIVE_MAP_EMBED_SRC,
+  OLIVE_NAP,
+  OLIVE_SERVICE_SUBURBS,
+  OLIVE_SERVICE_TYPES,
+} from "@/lib/seo/local-business";
+import { slugify } from "@/lib/slugify";
 
 const linkClass =
   "font-label text-xs font-medium uppercase tracking-[0.22em] text-on-surface-variant transition-colors hover:text-primary";
@@ -36,27 +43,110 @@ export async function SiteFooter() {
         </div>
 
         <div className="grid grid-cols-12 gap-10 border-t border-outline-variant/40 pt-12 md:pt-16">
-          <div className="col-span-12 md:col-span-5 lg:col-span-6">
+          <div className="col-span-12 md:col-span-6 lg:col-span-5">
             <p className="max-w-md font-display text-[1.375rem] font-normal italic leading-[1.35] text-on-surface md:text-[1.625rem] lg:text-[1.875rem]">
-              Digital marketing built around your chair, not a template.
+              Digital marketing built around your business, not a template.
             </p>
-            <div className="mt-8 flex flex-col gap-2 font-body text-sm text-on-surface-variant md:text-base">
-              <a
-                className="transition-colors hover:text-primary"
-                href={`mailto:${contact.email}`}
+
+            {/* Canonical NAP — must match Google Business Profile exactly */}
+            <address
+              itemScope
+              itemType="https://schema.org/LocalBusiness"
+              className="mt-8 not-italic"
+            >
+              <p
+                itemProp="name"
+                className="font-headline text-base font-medium text-on-surface md:text-lg"
               >
-                {contact.email}
-              </a>
-              <a
-                className="transition-colors hover:text-primary"
-                href={`tel:${contact.phoneE164}`}
+                {OLIVE_NAP.name}
+              </p>
+              <p
+                className="mt-1 font-body text-sm text-on-surface-variant md:text-base"
+                itemProp="address"
+                itemScope
+                itemType="https://schema.org/PostalAddress"
               >
-                {contact.phoneDisplay}
-              </a>
+                <span itemProp="addressLocality">{OLIVE_NAP.addressLocality}</span>
+                ,{" "}
+                <span itemProp="addressRegion">{OLIVE_NAP.addressRegion}</span>{" "}
+                <span itemProp="postalCode">{OLIVE_NAP.postalCode}</span>,{" "}
+                <span itemProp="addressCountry">Australia</span>
+              </p>
+              <p className="mt-3 flex flex-col gap-2 font-body text-sm text-on-surface-variant md:text-base">
+                <a
+                  className="transition-colors hover:text-primary"
+                  href={`tel:${OLIVE_NAP.phoneE164}`}
+                  itemProp="telephone"
+                >
+                  {OLIVE_NAP.phoneDisplay}
+                </a>
+                <a
+                  className="transition-colors hover:text-primary"
+                  href={`mailto:${contact.email}`}
+                  itemProp="email"
+                >
+                  {contact.email}
+                </a>
+              </p>
+              <p className="mt-3 font-label text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-on-surface-variant/80">
+                Hours · Mon–Fri 1pm–5pm AEST
+              </p>
+            </address>
+
+            {/* Google Map embed — boosts local relevance + dwell time */}
+            <div className="mt-6 overflow-hidden rounded-2xl border border-outline-variant/40">
+              <iframe
+                title="Olive Marketing — Melbourne service area map"
+                src={OLIVE_MAP_EMBED_SRC}
+                width="100%"
+                height="220"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                style={{ border: 0 }}
+                allowFullScreen
+              />
             </div>
           </div>
 
           <div className="col-span-6 md:col-span-3 lg:col-span-3">
+            <p className="mb-4 font-label text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-on-surface-variant/80">
+              Services
+            </p>
+            <ul className="flex flex-col gap-3">
+              {OLIVE_SERVICE_TYPES.slice(0, 8).map((service) => (
+                <li key={service}>
+                  <Link
+                    href={`/services/${slugify(`${service}-Melbourne`)}`}
+                    className={linkClass}
+                  >
+                    {service} Melbourne
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/services" className={`${linkClass} text-primary`}>
+                  All services →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="col-span-6 md:col-span-3 lg:col-span-2">
+            <p className="mb-4 font-label text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-on-surface-variant/80">
+              Areas We Serve
+            </p>
+            <ul className="flex flex-col gap-3">
+              {OLIVE_SERVICE_SUBURBS.map((s) => (
+                <li key={s.slug}>
+                  <Link href={`/areas/${s.slug}`} className={linkClass}>
+                    {s.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-12 md:col-span-12 lg:col-span-2">
             <p className="mb-4 font-label text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-on-surface-variant/80">
               Explore
             </p>
@@ -72,6 +162,11 @@ export async function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/process" className={linkClass}>
+                  Our process
+                </Link>
+              </li>
+              <li>
                 <a
                   className={linkClass}
                   href={facebookUrl}
@@ -80,19 +175,6 @@ export async function SiteFooter() {
                     : {})}
                 >
                   {t("facebook")} ↗
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="col-span-6 md:col-span-4 lg:col-span-3">
-            <p className="mb-4 font-label text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-on-surface-variant/80">
-              Legal
-            </p>
-            <ul className="flex flex-col gap-3">
-              <li>
-                <a className={linkClass} href="#">
-                  {t("privacy")}
                 </a>
               </li>
               <li>

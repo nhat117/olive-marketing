@@ -30,8 +30,11 @@ export async function SiteHeader() {
           >
             {t("philosophy")}
           </Link>
-          <Link className={linkClass} href="/#services">
+          <Link className={linkClass} href="/services">
             {t("services")}
+          </Link>
+          <Link className={linkClass} href="/areas">
+            Areas
           </Link>
           <Link className={linkClass} href="/#inquiry">
             {t("contact")}

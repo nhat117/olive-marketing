@@ -14,6 +14,7 @@ import { StatsStrip } from "@/components/landing/StatsStrip";
 import { CursorSpotlight } from "@/components/motion/CursorSpotlight";
 import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { buildOrganizationJsonLd } from "@/lib/seo/article-json-ld";
+import { buildLocalBusinessJsonLd } from "@/lib/seo/local-business";
 import { getHomepageSeo } from "@/lib/homepage-seo";
 import { absoluteUrlLocalized } from "@/lib/locale-path";
 import type { Metadata } from "next";
@@ -93,6 +94,7 @@ export default async function Home({ params }: Props) {
       <JsonLd
         data={buildOrganizationJsonLd(absoluteUrlLocalized("/", locale))}
       />
+      <JsonLd data={buildLocalBusinessJsonLd()} />
       <ScrollProgress />
       <CursorSpotlight />
       <SiteHeader />

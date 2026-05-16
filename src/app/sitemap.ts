@@ -3,6 +3,8 @@ import { routing } from "@/i18n/routing";
 import { absoluteUrlLocalized } from "@/lib/locale-path";
 import { createClient } from "@/lib/supabase/server";
 import { getGrowthPageSlugs } from "@/lib/seo/programmatic-growth-pages";
+import { getMelbourneServiceSlugs } from "@/lib/seo/melbourne-services";
+import { getMelbourneAreaSlugs } from "@/lib/seo/melbourne-areas";
 
 export const revalidate = 3600;
 
@@ -64,7 +66,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.85,
     }),
+    entry("/services", {
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    }),
+    entry("/areas", {
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    }),
   ];
+
+  for (const slug of getMelbourneServiceSlugs()) {
+    entries.push(
+      entry(`/services/${slug}`, {
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.9,
+      }),
+    );
+  }
+
+  for (const slug of getMelbourneAreaSlugs()) {
+    entries.push(
+      entry(`/areas/${slug}`, {
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.85,
+      }),
+    );
+  }
 
   for (const slug of await getGrowthPageSlugs()) {
     entries.push(

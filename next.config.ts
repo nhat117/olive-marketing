@@ -20,6 +20,7 @@ const securityHeaders = [
       "font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com",
       "connect-src 'self' https://*.supabase.co https://va.vercel-scripts.com https://vitals.vercel-insights.com https://www.facebook.com https://connect.facebook.net",
       "media-src 'self' https: blob:",
+      "frame-src https://www.google.com https://www.facebook.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",

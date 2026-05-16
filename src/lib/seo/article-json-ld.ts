@@ -59,7 +59,7 @@ export function buildOrganizationJsonLd(organizationUrl?: string): Record<string
       "Digital marketing agency for salons, spas, nail studios, med-spas, and beauty brands — websites, organic and paid social, local SEO, and campaigns measured on leads and bookings.",
     areaServed: {
       "@type": "GeoCircle",
-      geoMidpoint: { "@type": "GeoCoordinates", latitude: -33.87, longitude: 151.21 },
+      geoMidpoint: { "@type": "GeoCoordinates", latitude: -37.8136, longitude: 144.9631 },
       geoRadius: "50000",
     },
     serviceType: [
