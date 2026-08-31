@@ -70,9 +70,10 @@ Olive Marketing helps appointment-based beauty and wellness businesses grow thro
 ## Key pages
 
 - Home: ${base}
+- About: ${absoluteUrl("/about")}
 - Insights (blog): ${absoluteUrl("/blog")}
 - Growth guides: ${absoluteUrl("/grow")}
-- Contact / Inquiry: ${base}/#inquiry
+- Contact: ${absoluteUrl("/contact")}
 
 ## Blog articles
 
@@ -82,6 +83,8 @@ ${growthList ? `## Growth guides (service-specific landing pages)\n\n${growthLis
 
 ## Contact
 
+- Address: 18 Esther St, Preston VIC 3072, Australia
+- Phone: +61 425 191 488
 - Email: contact@olivemarketing.me
 - Facebook: https://www.facebook.com/profile.php?id=61587077835514
 

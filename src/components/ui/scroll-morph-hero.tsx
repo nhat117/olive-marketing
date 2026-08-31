@@ -265,7 +265,7 @@ export default function ScrollMorphHero({
         >
             <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
                 {/* Intro text — sits in the clear center of the circle */}
-                <div className="absolute z-20 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2 px-6 max-w-[min(90%,34rem)]">
+                <div className="absolute z-20 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2 px-6 max-w-[min(92%,42rem)]">
                     {brand ? (
                         <motion.p
                             initial={{ opacity: 0, y: -8 }}
@@ -288,22 +288,22 @@ export default function ScrollMorphHero({
                                 : { opacity: 0, filter: "blur(10px)" }
                         }
                         transition={{ duration: 1 }}
-                        className="font-display italic text-[2rem] md:text-[3.75rem] lg:text-[4.5rem] tracking-tight text-primary leading-[0.98]"
+                        className="font-display italic text-[1.85rem] md:text-[3.25rem] lg:text-[3.85rem] tracking-tight text-primary leading-[0.98] text-balance"
                     >
                         {introHeadline}
                     </motion.h1>
-                    <motion.p
+                    <motion.h2
                         initial={{ opacity: 0 }}
                         animate={
                             introPhase === "circle" && morphValue < 0.5
-                                ? { opacity: 0.75 - morphValue }
+                                ? { opacity: 0.9 - morphValue }
                                 : { opacity: 0 }
                         }
                         transition={{ duration: 1, delay: 0.2 }}
-                        className="mt-5 md:mt-6 font-label text-[0.65rem] md:text-xs font-semibold tracking-[0.28em] uppercase text-on-surface-variant"
+                        className="mt-5 md:mt-6 font-display italic text-[1.2rem] md:text-[1.65rem] lg:text-[1.85rem] tracking-tight text-on-surface leading-[1.15]"
                     >
                         {introSub}
-                    </motion.p>
+                    </motion.h2>
                 </div>
 
                 {/* Arc-active content (fades in at end of morph) */}

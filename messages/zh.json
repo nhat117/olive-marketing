@@ -28,12 +28,13 @@
   },
   "Hero": {
     "overline": "专注在线预约、AI 自动化与营销",
-    "headline": "让增长达到 10 倍",
+    "headline": "Marketing Agency Melbourne",
+    "brandLine": "让增长达到 10 倍",
     "sub": "我们与沙龙、水疗、美甲店、医美周边美学以及产品驱动的美妆品牌合作。您将获得清晰定位、能转化的网站与预约路径，以及以线索和预约为衡量标准的自然与付费投放——而不只是点赞。",
     "subMobile": "面向沙龙、水疗与美妆品牌的营销——网站、社交、广告与预约路径，以真实预约衡量效果。",
     "ctaPrimary": "预约战略通话",
     "ctaSecondary": "阅读我们的打法",
-    "quote": "全漏斗营销——我们真正追踪咨询与预约。"
+    "quote": "本地 SEO 与 Google Ads，用预约衡量。"
   },
   "Philosophy": {
     "overline": "理念",
@@ -49,7 +50,7 @@
   },
   "Solutions": {
     "overline": "我们交付什么",
-    "title": "为忙碌的美容团队打造的服务。",
+    "title": "网站设计、SEO、品牌与获客。",
     "seeHow": "了解我们的思路",
     "card01Title": "预约与提醒",
     "card01Body": "连接您的工具栈——Square、GlossGenius、Acuity 等——让确认、提醒与召回信息减少爽约并保护技师时间。",
@@ -71,6 +72,8 @@
     "facebook": "Facebook"
   },
   "Footer": {
+    "about": "关于",
+    "contact": "联系",
     "insights": "洞察",
     "growthGuides": "增长指南",
     "privacy": "隐私",
@@ -229,5 +232,24 @@
     "title": "页面未找到",
     "body": "您访问的页面不存在或已移动。",
     "home": "返回首页"
+  },
+  "ContactPage": {
+    "metaTitle": "联系",
+    "metaDescription": "联系 Olive Marketing：18 Esther St, Preston VIC 3072。电话 +61 425 191 488。预约墨尔本营销机构战略沟通。",
+    "overline": "取得联系",
+    "heading": "联系 Olive Marketing",
+    "lead": "欢迎到 Preston 拜访或预约通话。我们会回复下一步、大致范围以及是否有档期。",
+    "cta": "预约战略通话",
+    "backHome": "← 返回首页"
+  },
+  "AboutPage": {
+    "metaTitle": "关于",
+    "metaDescription": "Olive Marketing 是位于 18 Esther St, Preston VIC 3072 的墨尔本营销机构，提供网站设计、SEO、品牌与获客。",
+    "overline": "工作室",
+    "heading": "关于 Olive Marketing",
+    "lead": "Olive Marketing 是墨尔本营销机构，帮助本地企业完成高端网站设计、SEO、品牌、Google Ads 与获客。",
+    "body": "我们位于 Preston 的 18 Esther St，服务大墨尔本地区的沙龙、水疗与成长型品牌。每个项目都以预约和收入衡量——而不是虚荣指标。",
+    "contactLink": "联系我们",
+    "backHome": "← 返回首页"
   }
 }

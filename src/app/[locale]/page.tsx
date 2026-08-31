@@ -16,7 +16,7 @@ import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { buildOrganizationJsonLd } from "@/lib/seo/article-json-ld";
 import { buildLocalBusinessJsonLd } from "@/lib/seo/local-business";
 import { getHomepageSeo } from "@/lib/homepage-seo";
-import { absoluteUrlLocalized } from "@/lib/locale-path";
+import { absoluteUrlLocalized, localeAlternates } from "@/lib/locale-path";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -33,18 +33,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ogTitle = seo.ogTitle || title;
   const ogDescription = seo.ogDescription || description;
 
-  const alternates: Record<string, string> = {};
-  for (const loc of ["en", "vi", "zh"]) {
-    alternates[loc] = absoluteUrlLocalized("/", loc);
-  }
-  alternates["x-default"] = absoluteUrlLocalized("/", "en");
-
   return {
     title,
     description,
     alternates: {
       canonical: url,
-      languages: alternates,
+      languages: localeAlternates("/"),
     },
     openGraph: {
       url,

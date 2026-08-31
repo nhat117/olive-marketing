@@ -61,7 +61,7 @@ export default async function ServicesIndexPage({ params }: Props) {
             Every service below is run from our Melbourne studio for Melbourne
             businesses. Pick the page that matches what you need — or{" "}
             <Link
-              href="/#inquiry"
+              href="/contact"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
               tell us about your project

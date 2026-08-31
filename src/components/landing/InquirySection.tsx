@@ -13,6 +13,7 @@ import {
   m3TransitionExpressive,
 } from "@/lib/material-landing";
 import { getSiteContact } from "@/lib/site-contact";
+import { formatOliveAddressLine, OLIVE_NAP } from "@/lib/seo/local-business";
 
 export async function InquirySection() {
   const t = await getTranslations("Inquiry");
@@ -78,19 +79,26 @@ export async function InquirySection() {
                     {t("cta")}
                   </OpenLeadButton>
                 </Magnetic>
-                <div className="flex flex-col gap-2 font-label text-sm font-semibold text-white/85 md:flex-row md:gap-6 md:text-base">
-                  <a
-                    href={`mailto:${contact.email}`}
-                    className={`underline-offset-4 hover:text-white ${m3TransitionExpressive}`}
-                  >
-                    {contact.email}
-                  </a>
-                  <a
-                    href={`tel:${contact.phoneE164}`}
-                    className={`underline-offset-4 hover:text-white ${m3TransitionExpressive}`}
-                  >
-                    {contact.phoneDisplay}
-                  </a>
+                <div className="flex flex-col gap-2 font-label text-sm font-semibold text-white/85 md:text-base">
+                  <p className="font-body text-sm font-normal text-white/80 md:text-base">
+                    {OLIVE_NAP.name}
+                    <br />
+                    {formatOliveAddressLine()}
+                  </p>
+                  <div className="flex flex-col gap-2 md:flex-row md:gap-6">
+                    <a
+                      href={`tel:${OLIVE_NAP.phoneE164}`}
+                      className={`underline-offset-4 hover:text-white ${m3TransitionExpressive}`}
+                    >
+                      {OLIVE_NAP.phoneDisplay}
+                    </a>
+                    <a
+                      href={`mailto:${contact.email}`}
+                      className={`underline-offset-4 hover:text-white ${m3TransitionExpressive}`}
+                    >
+                      {contact.email}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

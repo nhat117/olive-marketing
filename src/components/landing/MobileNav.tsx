@@ -8,7 +8,7 @@ import { LocaleSwitcher } from "@/components/landing/LocaleSwitcher";
 const NAV_ITEMS = [
   { href: "/#philosophy", labelKey: "philosophy" as const },
   { href: "/#services", labelKey: "services" as const },
-  { href: "/#inquiry", labelKey: "contact" as const },
+  { href: "/contact", labelKey: "contact" as const },
   { href: "/blog", labelKey: "insights" as const },
 ];
 

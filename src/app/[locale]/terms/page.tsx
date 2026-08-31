@@ -75,7 +75,7 @@ export default async function TermsPage({ params }: Props) {
               </h2>
               <p className="text-on-surface-variant">
                 {t("s2Before")}
-                <Link href="/#inquiry" className={linkClass}>
+                <Link href="/contact" className={linkClass}>
                   {t("s2Link")}
                 </Link>
                 {t("s2After")}
@@ -169,7 +169,7 @@ export default async function TermsPage({ params }: Props) {
               </h2>
               <p className="text-on-surface-variant">
                 {t("s13Before")}
-                <Link href="/#inquiry" className={linkClass}>
+                <Link href="/contact" className={linkClass}>
                   {t("s13Link")}
                 </Link>
                 {t("s13After")}

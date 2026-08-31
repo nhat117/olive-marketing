@@ -52,7 +52,7 @@ export default async function GrowIndexPage({ params }: Props) {
           <p className="mb-10 max-w-2xl font-body text-lg leading-relaxed text-on-surface-variant md:mb-12">
             {t("introBefore")}{" "}
             <Link
-              href="/#inquiry"
+              href="/contact"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
               {t("introLink")}

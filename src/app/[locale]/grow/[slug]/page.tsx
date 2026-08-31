@@ -196,7 +196,7 @@ export default async function GrowSlugPage({ params }: Props) {
 
           <div className="mt-14 flex flex-wrap gap-4 border-t border-outline-variant/25 pt-10">
             <Link
-              href="/#inquiry"
+              href="/contact"
               className="font-medium text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
             >
               {t("ctaStrategyCall")}

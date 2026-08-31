@@ -28,12 +28,13 @@
   },
   "Hero": {
     "overline": "Chuyên đặt lịch online, tự động hóa AI & marketing",
-    "headline": "Tăng trưởng gấp 10 lần",
+    "headline": "Marketing Agency Melbourne",
+    "brandLine": "Tăng trưởng gấp 10 lần",
     "sub": "Chúng tôi đồng hành cùng salon, spa, tiệm nail, thẩm mỹ cận y và thương hiệu làm đẹp bán sản phẩm. Bạn có định vị rõ ràng, website và luồng đặt lịch chuyển đổi tốt, cùng chiến dịch organic và paid đo lường theo lead và lịch hẹn—không chỉ lượt thích.",
     "subMobile": "Marketing cho salon, spa & thương hiệu làm đẹp — website, mạng xã hội, quảng cáo và luồng đặt lịch đo lường bằng lịch hẹn thực.",
     "ctaPrimary": "Đặt lịch tư vấn chiến lược",
     "ctaSecondary": "Đọc playbook của chúng tôi",
-    "quote": "Marketing toàn phễu—chúng tôi thực sự theo dõi tư vấn và lịch hẹn."
+    "quote": "SEO địa phương và Google Ads, đo bằng lịch hẹn."
   },
   "Philosophy": {
     "overline": "Triết lý",
@@ -49,7 +50,7 @@
   },
   "Solutions": {
     "overline": "Chúng tôi mang lại",
-    "title": "Dịch vụ cho đội ngũ làm đẹp bận rộn.",
+    "title": "Thiết kế web, SEO, thương hiệu và tạo lead.",
     "seeHow": "Xem cách chúng tôi suy nghĩ",
     "card01Title": "Đặt lịch & nhắc hẹn",
     "card01Body": "Kết nối hệ thống của bạn—Square, GlossGenius, Acuity hoặc tương tự—để xác nhận, nhắc hẹn và tin nhắn win-back giảm vắng mặt và bảo vệ thời gian nghệ sĩ.",
@@ -71,6 +72,8 @@
     "facebook": "Facebook"
   },
   "Footer": {
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
     "insights": "Bài viết",
     "growthGuides": "Hướng dẫn tăng trưởng",
     "privacy": "Quyền riêng tư",
@@ -229,5 +232,24 @@
     "title": "Không tìm thấy trang",
     "body": "Trang bạn tìm không tồn tại hoặc đã được chuyển.",
     "home": "Về trang chủ"
+  },
+  "ContactPage": {
+    "metaTitle": "Liên hệ",
+    "metaDescription": "Liên hệ Olive Marketing tại 18 Esther St, Preston VIC 3072. Điện thoại +61 425 191 488. Đặt lịch tư vấn với agency marketing tại Melbourne.",
+    "overline": "Liên hệ",
+    "heading": "Liên hệ Olive Marketing",
+    "lead": "Ghé Preston hoặc đặt cuộc gọi. Chúng tôi phản hồi bước tiếp theo, phạm vi sơ bộ và khả năng nhận việc.",
+    "cta": "Đặt lịch tư vấn chiến lược",
+    "backHome": "← Về trang chủ"
+  },
+  "AboutPage": {
+    "metaTitle": "Giới thiệu",
+    "metaDescription": "Olive Marketing là agency marketing tại Melbourne, đặt tại 18 Esther St, Preston VIC 3072 — thiết kế web, SEO, thương hiệu và tạo lead.",
+    "overline": "Studio",
+    "heading": "Về Olive Marketing",
+    "lead": "Olive Marketing là agency marketing tại Melbourne, giúp doanh nghiệp địa phương với thiết kế website, SEO, thương hiệu, Google Ads và tạo lead.",
+    "body": "Chúng tôi đặt tại 18 Esther St, Preston và làm việc với salon, spa cùng các thương hiệu trên khắp Greater Melbourne. Mỗi hợp đồng đo bằng lịch hẹn và doanh thu — không phải chỉ số ảo.",
+    "contactLink": "Liên hệ",
+    "backHome": "← Về trang chủ"
   }
 }
