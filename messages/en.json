@@ -28,12 +28,13 @@
   },
   "Hero": {
     "overline": "A studio for salons, spas & beauty brands",
-    "headline": "More bookings. Less noise.",
+    "headline": "Marketing Agency Melbourne",
+    "brandLine": "More bookings. Less noise.",
     "sub": "We work with salons, spas, nail studios, aesthetics clinics, and beauty brands. The kind of marketing that actually moves the calendar: clear positioning, a site and booking flow people can use, and social plus paid that gets measured on the appointments that show up.",
     "subMobile": "Websites, social, and ads for salons, spas, and beauty brands — measured on real appointments, not likes.",
     "ctaPrimary": "Book a strategy call",
     "ctaSecondary": "Read our playbook",
-    "quote": "We build the site, run the ads, and watch the bookings land."
+    "quote": "Local SEO and Google Ads, measured on bookings."
   },
   "Philosophy": {
     "overline": "Philosophy",
@@ -49,7 +50,7 @@
   },
   "Solutions": {
     "overline": "What we deliver",
-    "title": "Services built for busy beauty teams.",
+    "title": "Web design, SEO, branding & lead generation.",
     "seeHow": "See how we think",
     "card01Title": "Booking & reminders",
     "card01Body": "We connect your stack—Square, GlossGenius, Acuity, or others—so confirmations, reminders, and win-back messages reduce no-shows and protect artist time.",
@@ -71,6 +72,8 @@
     "facebook": "Facebook"
   },
   "Footer": {
+    "about": "About",
+    "contact": "Contact",
     "insights": "Insights",
     "growthGuides": "Growth guides",
     "privacy": "Privacy",
@@ -229,5 +232,24 @@
     "title": "Page not found",
     "body": "The page you are looking for does not exist or has moved.",
     "home": "Back to home"
+  },
+  "ContactPage": {
+    "metaTitle": "Contact",
+    "metaDescription": "Contact Olive Marketing at 18 Esther St, Preston VIC 3072. Phone +61 425 191 488. Book a strategy call with a Melbourne marketing agency.",
+    "overline": "Get in touch",
+    "heading": "Contact Olive Marketing",
+    "lead": "Visit us in Preston or book a call. We reply with next steps, a rough scope, and whether we have capacity.",
+    "cta": "Book a strategy call",
+    "backHome": "← Back to home"
+  },
+  "AboutPage": {
+    "metaTitle": "About",
+    "metaDescription": "Olive Marketing is a Melbourne marketing agency based at 18 Esther St, Preston VIC 3072 — luxury web design, SEO, branding, and lead generation.",
+    "overline": "The studio",
+    "heading": "About Olive Marketing",
+    "lead": "Olive Marketing is a Melbourne marketing agency helping local businesses with luxury website design, SEO, branding, Google Ads, and lead generation.",
+    "body": "We're based at 18 Esther St, Preston, and work with salons, spas, and growing brands across Greater Melbourne. Every engagement is measured on bookings and revenue — not vanity metrics.",
+    "contactLink": "Contact us",
+    "backHome": "← Back to home"
   }
 }

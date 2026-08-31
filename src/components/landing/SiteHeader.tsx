@@ -36,7 +36,7 @@ export async function SiteHeader() {
           <Link className={linkClass} href="/areas">
             Areas
           </Link>
-          <Link className={linkClass} href="/#inquiry">
+          <Link className={linkClass} href="/contact">
             {t("contact")}
           </Link>
           <Link href="/blog" className={linkClass}>

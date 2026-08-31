@@ -1,9 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getSiteContact } from "@/lib/site-contact";
+import { NapBlock } from "@/components/landing/NapBlock";
 import {
-  OLIVE_MAP_EMBED_SRC,
-  OLIVE_NAP,
   OLIVE_SERVICE_SUBURBS,
   OLIVE_SERVICE_TYPES,
 } from "@/lib/seo/local-business";
@@ -48,64 +47,7 @@ export async function SiteFooter() {
               Digital marketing built around your business, not a template.
             </p>
 
-            {/* Canonical NAP — must match Google Business Profile exactly */}
-            <address
-              itemScope
-              itemType="https://schema.org/LocalBusiness"
-              className="mt-8 not-italic"
-            >
-              <p
-                itemProp="name"
-                className="font-headline text-base font-medium text-on-surface md:text-lg"
-              >
-                {OLIVE_NAP.name}
-              </p>
-              <p
-                className="mt-1 font-body text-sm text-on-surface-variant md:text-base"
-                itemProp="address"
-                itemScope
-                itemType="https://schema.org/PostalAddress"
-              >
-                <span itemProp="addressLocality">{OLIVE_NAP.addressLocality}</span>
-                ,{" "}
-                <span itemProp="addressRegion">{OLIVE_NAP.addressRegion}</span>{" "}
-                <span itemProp="postalCode">{OLIVE_NAP.postalCode}</span>,{" "}
-                <span itemProp="addressCountry">Australia</span>
-              </p>
-              <p className="mt-3 flex flex-col gap-2 font-body text-sm text-on-surface-variant md:text-base">
-                <a
-                  className="transition-colors hover:text-primary"
-                  href={`tel:${OLIVE_NAP.phoneE164}`}
-                  itemProp="telephone"
-                >
-                  {OLIVE_NAP.phoneDisplay}
-                </a>
-                <a
-                  className="transition-colors hover:text-primary"
-                  href={`mailto:${contact.email}`}
-                  itemProp="email"
-                >
-                  {contact.email}
-                </a>
-              </p>
-              <p className="mt-3 font-label text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-on-surface-variant/80">
-                Hours · Mon–Fri 1pm–5pm AEST
-              </p>
-            </address>
-
-            {/* Google Map embed — boosts local relevance + dwell time */}
-            <div className="mt-6 overflow-hidden rounded-2xl border border-outline-variant/40">
-              <iframe
-                title="Olive Marketing — Melbourne service area map"
-                src={OLIVE_MAP_EMBED_SRC}
-                width="100%"
-                height="220"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                style={{ border: 0 }}
-                allowFullScreen
-              />
-            </div>
+            <NapBlock showMap className="mt-8" />
           </div>
 
           <div className="col-span-6 md:col-span-3 lg:col-span-3">
@@ -151,6 +93,16 @@ export async function SiteFooter() {
               Explore
             </p>
             <ul className="flex flex-col gap-3">
+              <li>
+                <Link href="/about" className={linkClass}>
+                  {t("about")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className={linkClass}>
+                  {t("contact")}
+                </Link>
+              </li>
               <li>
                 <Link href="/blog" className={linkClass}>
                   {t("insights")}

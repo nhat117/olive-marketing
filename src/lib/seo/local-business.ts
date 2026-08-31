@@ -2,35 +2,64 @@
  * Single source of truth for Olive Marketing's local business data.
  * Used by JSON-LD schema, footer NAP, map embeds, sitemap, and service/area pages.
  *
- * Service-area business based in Melbourne, AU — no public street address.
+ * Street NAP must match the Google Business Profile at 18 Esther St, Preston.
  */
 
-import { absoluteUrl } from "@/lib/site-url";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
 import { SITE_CONTACT_DEFAULTS } from "@/lib/site-contact-defaults";
+
+/** schema.org Email requires a bare address — never a mailto: prefix. */
+export function schemaEmail(value: string): string {
+  return value.replace(/^mailto:/i, "").trim();
+}
 
 export const OLIVE_NAP = {
   name: "Olive Marketing",
   legalName: "Olive Marketing",
   phoneE164: SITE_CONTACT_DEFAULTS.phoneE164,
   phoneDisplay: SITE_CONTACT_DEFAULTS.phoneDisplay,
-  email: SITE_CONTACT_DEFAULTS.email,
-  /** Service-area business — no public street; we publish the city/state for local context. */
-  addressLocality: "Melbourne",
+  email: schemaEmail(SITE_CONTACT_DEFAULTS.email),
+  streetAddress: "18 Esther St",
+  addressLocality: "Preston",
   addressRegion: "VIC",
   addressCountry: "AU",
-  postalCode: "3000",
-  /** Melbourne CBD centroid — used for GeoCoordinates + map embed center. */
-  latitude: -37.8136,
-  longitude: 144.9631,
+  postalCode: "3072",
+  /** GBP pin for Olive Marketing at 18 Esther St, Preston VIC 3072. */
+  latitude: -37.7478847,
+  longitude: 145.0006934,
   serviceRadiusKm: 35,
-  /** Hours per the brief: 1pm–5pm. Mon–Fri appointment-style availability. */
+  /** Hours match the Google Business Profile (Mon–Fri 9 AM–5 PM). */
   openingHours: [
-    { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "13:00", closes: "17:00" },
+    {
+      days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "17:00",
+    },
   ],
   priceRange: "$$$",
   foundingDate: "2016",
   socialUrls: [SITE_CONTACT_DEFAULTS.facebookUrl],
 } as const;
+
+function formatHour12(hhmm: string): string {
+  const [hStr, mStr] = hhmm.split(":");
+  const hours = Number(hStr);
+  const minutes = Number(mStr);
+  const suffix = hours >= 12 ? "pm" : "am";
+  const hour12 = hours % 12 === 0 ? 12 : hours % 12;
+  if (minutes) return `${hour12}:${mStr}${suffix}`;
+  return `${hour12}${suffix}`;
+}
+
+/** Visible hours string derived from OLIVE_NAP.openingHours (GBP). */
+export function formatOliveHoursDisplay(): string {
+  const slot = OLIVE_NAP.openingHours[0];
+  return `Mon–Fri ${formatHour12(slot.opens)}–${formatHour12(slot.closes)} AEST`;
+}
+
+export function formatOliveAddressLine(): string {
+  return `${OLIVE_NAP.streetAddress}, ${OLIVE_NAP.addressLocality} ${OLIVE_NAP.addressRegion} ${OLIVE_NAP.postalCode}, Australia`;
+}
 
 /** Suburbs / cities Olive Marketing serves — drives schema areaServed + /areas/[slug] pages + sitemap. */
 export const OLIVE_SERVICE_SUBURBS = [
@@ -74,28 +103,30 @@ export const OLIVE_SERVICE_TYPES = [
 ] as const;
 
 /**
- * Full LocalBusiness / ProfessionalService JSON-LD with Melbourne NAP, hours,
+ * Full LocalBusiness / ProfessionalService JSON-LD with Preston NAP, hours,
  * geo-coordinates, service area, services list, and sameAs profiles.
  */
 export function buildLocalBusinessJsonLd(): Record<string, unknown> {
-  const url = absoluteUrl("/");
+  const origin = getSiteUrl();
+  const email = schemaEmail(OLIVE_NAP.email);
   return {
     "@context": "https://schema.org",
     "@type": ["ProfessionalService", "LocalBusiness", "MarketingAgency"],
-    "@id": `${url}#organization`,
+    "@id": `${origin}/#organization`,
     name: OLIVE_NAP.name,
     legalName: OLIVE_NAP.legalName,
-    url,
+    url: origin,
     logo: absoluteUrl("/icon.svg"),
     image: absoluteUrl("/opengraph-image"),
     description:
       "Melbourne marketing agency specialising in luxury website design, SEO, branding, and lead generation for local businesses across Preston, Richmond, Northcote, Brunswick, South Yarra, Carlton and Greater Melbourne.",
     telephone: OLIVE_NAP.phoneE164,
-    email: OLIVE_NAP.email,
+    email,
     priceRange: OLIVE_NAP.priceRange,
     foundingDate: OLIVE_NAP.foundingDate,
     address: {
       "@type": "PostalAddress",
+      streetAddress: OLIVE_NAP.streetAddress,
       addressLocality: OLIVE_NAP.addressLocality,
       addressRegion: OLIVE_NAP.addressRegion,
       addressCountry: OLIVE_NAP.addressCountry,
@@ -155,7 +186,7 @@ export function buildLocalBusinessJsonLd(): Record<string, unknown> {
       {
         "@type": "ContactPoint",
         telephone: OLIVE_NAP.phoneE164,
-        email: OLIVE_NAP.email,
+        email,
         contactType: "sales",
         areaServed: "AU",
         availableLanguage: ["English", "Vietnamese", "Chinese"],
@@ -165,6 +196,7 @@ export function buildLocalBusinessJsonLd(): Record<string, unknown> {
   };
 }
 
-/** Google Maps embed centred on Melbourne — used in footer + contact zone. */
-export const OLIVE_MAP_EMBED_SRC =
-  "https://www.google.com/maps?q=Melbourne+VIC+Australia&z=12&output=embed";
+/** Google Maps embed pinned to the Olive Marketing GBP at 18 Esther St, Preston. */
+export const OLIVE_MAP_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(
+  "Olive Marketing, 18 Esther St, Preston VIC 3072",
+)}&ll=${OLIVE_NAP.latitude},${OLIVE_NAP.longitude}&z=16&output=embed`;

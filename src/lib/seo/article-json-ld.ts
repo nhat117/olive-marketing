@@ -1,4 +1,8 @@
 import { absoluteUrl, getSiteUrl } from "@/lib/site-url";
+import {
+  OLIVE_NAP,
+  schemaEmail,
+} from "@/lib/seo/local-business";
 import type { Post } from "@/lib/types";
 
 export function buildArticleJsonLd(
@@ -16,6 +20,7 @@ export function buildArticleJsonLd(
     post.meta_description?.trim() || post.excerpt?.trim() || undefined;
   const datePublished = post.published_at ?? post.created_at;
   const dateModified = post.updated_at;
+  const origin = getSiteUrl();
 
   const json: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -26,13 +31,13 @@ export function buildArticleJsonLd(
     dateModified,
     author: {
       "@type": "Organization",
-      name: "Olive Marketing",
-      url: getSiteUrl(),
+      name: OLIVE_NAP.name,
+      url: origin,
     },
     publisher: {
       "@type": "Organization",
-      name: "Olive Marketing",
-      url: getSiteUrl(),
+      name: OLIVE_NAP.name,
+      url: origin,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -49,17 +54,41 @@ export function buildArticleJsonLd(
 }
 
 export function buildOrganizationJsonLd(organizationUrl?: string): Record<string, unknown> {
-  const url = organizationUrl ?? getSiteUrl();
+  const origin = getSiteUrl();
+  const url = organizationUrl ?? origin;
+  const email = schemaEmail(OLIVE_NAP.email);
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: "Olive Marketing",
-    url,
+    "@type": ["Organization", "ProfessionalService", "MarketingAgency"],
+    "@id": `${origin}/#organization`,
+    name: OLIVE_NAP.name,
+    url: origin,
+    logo: absoluteUrl("/icon.svg"),
+    image: absoluteUrl("/opengraph-image"),
     description:
       "Digital marketing agency for salons, spas, nail studios, med-spas, and beauty brands — websites, organic and paid social, local SEO, and campaigns measured on leads and bookings.",
+    telephone: OLIVE_NAP.phoneE164,
+    email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: OLIVE_NAP.streetAddress,
+      addressLocality: OLIVE_NAP.addressLocality,
+      addressRegion: OLIVE_NAP.addressRegion,
+      postalCode: OLIVE_NAP.postalCode,
+      addressCountry: OLIVE_NAP.addressCountry,
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: OLIVE_NAP.latitude,
+      longitude: OLIVE_NAP.longitude,
+    },
     areaServed: {
       "@type": "GeoCircle",
-      geoMidpoint: { "@type": "GeoCoordinates", latitude: -37.8136, longitude: 144.9631 },
+      geoMidpoint: {
+        "@type": "GeoCoordinates",
+        latitude: OLIVE_NAP.latitude,
+        longitude: OLIVE_NAP.longitude,
+      },
       geoRadius: "50000",
     },
     serviceType: [
@@ -79,14 +108,14 @@ export function buildOrganizationJsonLd(organizationUrl?: string): Record<string
       "Local SEO for beauty businesses",
       "Appointment-based business marketing",
     ],
-    sameAs: [
-      "https://www.facebook.com/profile.php?id=61587077835514",
-    ],
+    sameAs: [...OLIVE_NAP.socialUrls],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "contact@olivemarketing.me",
+      email,
+      telephone: OLIVE_NAP.phoneE164,
       contactType: "sales",
       availableLanguage: ["English", "Vietnamese", "Chinese"],
     },
+    mainEntityOfPage: url,
   };
 }

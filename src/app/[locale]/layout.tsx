@@ -10,7 +10,7 @@ import { LeadFormProvider } from "@/components/leads/lead-modal";
 import { openGraphLocale } from "@/lib/app-locale";
 import { routing } from "@/i18n/routing";
 import { getSiteContact } from "@/lib/site-contact";
-import { getSiteUrl } from "@/lib/site-url";
+import { CANONICAL_SITE_URL, getSiteUrl } from "@/lib/site-url";
 import "../globals.css";
 
 const newsreader = Newsreader({
@@ -46,7 +46,7 @@ export async function generateMetadata({
   try {
     metadataBase = new URL(getSiteUrl());
   } catch {
-    metadataBase = new URL("http://localhost:3000");
+    metadataBase = new URL(CANONICAL_SITE_URL);
   }
 
   return {

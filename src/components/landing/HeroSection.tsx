@@ -17,7 +17,7 @@ export async function HeroSection() {
         images={[...HERO_GALLERY_IMAGES]}
         brand="Olive Marketing"
         introHeadline={t("headline")}
-        introSub={t("overline")}
+        introSub={t("brandLine")}
         arcHeadline={t("quote")}
         arcSub={t("subMobile")}
         backLabel="Olive"

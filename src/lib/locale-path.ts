@@ -13,3 +13,16 @@ export function withLocalePath(pathname: string, locale: string): string {
 export function absoluteUrlLocalized(pathname: string, locale: string): string {
   return absoluteUrl(withLocalePath(pathname, locale));
 }
+
+/** hreflang map for a pathname, including x-default → English. */
+export function localeAlternates(pathname: string): Record<string, string> {
+  const languages: Record<string, string> = {};
+  for (const locale of routing.locales) {
+    languages[locale] = absoluteUrlLocalized(pathname, locale);
+  }
+  languages["x-default"] = absoluteUrlLocalized(
+    pathname,
+    routing.defaultLocale,
+  );
+  return languages;
+}
